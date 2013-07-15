@@ -15,7 +15,7 @@ $items  = $menu->_items;
 $parent = $params->get('parentItem');
 
 foreach ($items as $key => $item) {
-	if ($item->parent != $parent && $key != $parent) {
+	if ($item->parent != $parent && $item->id != $parent) {
 		unset($items[$key]);
 	}
 }
