@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="module"
+         version="2.5"
+         method="upgrade">
+	<name>Menu Branch</name>
+	<creationDate>July 15, 2013</creationDate>
+	<author>Matt Thomas</author>
+	<authorUrl>http://betweenbrain.com</authorUrl>
+	<copyright>Copyright (C) 2013 betweenbrain llc. All rights reserved.</copyright>
+	<license>GNU General Public License version 3, or later.</license>
+	<version>0.1</version>
+	<description>MOD_MENU_BRANCH_DESC</description>
+
+	<files>
+		<filename module="mod_menubranch">mod_menubranch.php</filename>
+		<filename>helper.php</filename>
+		<folder>tmpl</folder>
+	</files>
+
+	<languages>
+		<language tag="en-GB">language/en-GB/en-GB.mod_menubranch.ini</language>
+	</languages>
+
+	<params>
+		<param name="parentItem"
+		       type="menuitem"
+		       default=""
+		       label="MOD_MENU_BRANCH_PARENT_LABEL"
+		       description="MOD_MENU_BRANCH_PARENT_DESC"/>
+	</params>
+
+</install>
