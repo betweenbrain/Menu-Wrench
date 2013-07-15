@@ -28,4 +28,10 @@
 		       description="MOD_MENU_BRANCH_PARENT_DESC"/>
 	</params>
 
+	<param name="moduleclass_sfx"
+	       type="text"
+	       default=""
+	       label="Module Class Suffix"
+	       description="PARAMMODULECLASSSUFFIX"/>
+
 </install>
