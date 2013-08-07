@@ -1,4 +1,4 @@
-Menu-Branch-Module
+Joomla! Menu Wrench
 ==================
 
-Renders a single Joomla menu branch
+Throw a wrench at your Joomla menus!
