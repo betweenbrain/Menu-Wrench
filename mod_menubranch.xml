@@ -13,6 +13,7 @@
 
 	<files>
 		<filename module="mod_menubranch">mod_menubranch.php</filename>
+		<folder>elements</folder>
 		<folder>tmpl</folder>
 	</files>
 
@@ -20,10 +21,9 @@
 		<language tag="en-GB">language/en-GB/en-GB.mod_menubranch.ini</language>
 	</languages>
 
-	<params>
-		<param name="parentItem"
-		       type="menuitem"
-		       default=""
+	<params addpath="/modules/mod_menubranch/elements">
+		<param name="parentItems"
+		       type="menuitems"
 		       label="MOD_MENU_BRANCH_PARENT_LABEL"
 		       description="MOD_MENU_BRANCH_PARENT_DESC"/>
 
