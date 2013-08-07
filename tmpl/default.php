@@ -11,7 +11,12 @@
 ?>
 <ul class="menu">
 	<?php foreach ($items as $item) {
-		echo '<li class="item' . $item->id . ' ' . $item->alias . '"><a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a></li>';
+		$parent  = isset($item->children) ? ' parent' : '';
+		$current = ($item->id == $active) ? ' current' : '';
+		$class   = 'item' . $item->id . ' ' . $item->alias . $parent . $current;
+		echo '<li class="' . $class . '"><a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
+		echo $helper->recurse($item);
+		echo '</li>';
 	}
 	?>
 </ul>

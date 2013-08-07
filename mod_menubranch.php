@@ -9,15 +9,14 @@
  * License    GNU GPL v3 or later
  */
 
+// Include the helper.
+require_once __DIR__ . '/helper.php';
+
 $app    = JFactory::getApplication();
 $menu   = $app->getMenu();
-$items  = $menu->_items;
-$parent = $params->get('parentItem');
+$active = $menu->getActive()->id;
 
-foreach ($items as $key => $item) {
-	if ($item->parent != $parent && $item->id != $parent) {
-		unset($items[$key]);
-	}
-}
+$helper = new modMenubranchHelper($params);
+$items  = $helper->getBranches();
 
 require(JModuleHelper::getLayoutPath('mod_menubranch'));
