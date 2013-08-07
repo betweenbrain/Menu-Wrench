@@ -104,61 +104,31 @@ class modMenubranchHelper {
 
 	public function render($item, $containerTag = '<ul>', $containerClass = 'menu', $itemTag = '<li>') {
 
-		$itemOpenTag  = str_replace('>', ' class="' . $item->class . '">', $itemTag);
-		$itemCloseTag = str_replace('<', '</', $itemTag);
-
-		if ($item->type == 'separator') {
-			$this->output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
-		} else {
-			$this->output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
-		}
-		$this->output .= $this->recurse($item, $containerTag, $containerClass, $itemTag);
-		$this->output .= $itemCloseTag;
-
-		return $this->output;
-	}
-
-	/**
-	 * Renders child items. Separated so that it can call itself recursively.
-	 * TODO: Somehow feels like this could be much DRYer.
-	 *
-	 * @param $item
-	 * @param $containerTag
-	 * @param $containerClass
-	 * @param $itemTag
-	 * @return string
-	 *
-	 * @since 0.1
-	 */
-
-	private function recurse($item, $containerTag, $containerClass, $itemTag) {
-
-		$child = NULL;
-
+		$itemOpenTag       = str_replace('>', ' class="' . $item->class . '">', $itemTag);
+		$itemCloseTag      = str_replace('<', '</', $itemTag);
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
 
+		if ($item->type == 'separator') {
+			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
+		} else {
+			$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
+		}
+
 		if (isset($item->children)) {
-			$child .= $containerOpenTag;
+
+			$output .= $containerOpenTag;
 
 			foreach ($item->children as $item) {
 
-				$itemOpenTag  = str_replace('>', ' class="' . $item->class . '">', $itemTag);
-				$itemCloseTag = str_replace('<', '</', $itemTag);
-
-				if ($item->type == 'separator') {
-					$child .= $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
-				} else {
-					$child .= $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
-				}
-				$child .= $this->recurse($item, $containerTag, $containerClass, $itemTag);
+				$output .= $this->render($item, $containerTag, $containerClass, $itemTag);
 			}
-			$child .= $itemCloseTag;
-			$child .= $containerCloseTag;
-		} else {
-			$child .= '';
+			$output .= $itemCloseTag;
+			$output .= $containerCloseTag;
 		}
 
-		return $child;
+		$output .= $itemCloseTag;
+
+		return $output;
 	}
 }
