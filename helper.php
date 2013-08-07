@@ -12,6 +12,13 @@
 class modMenubranchHelper {
 
 	/**
+	 * Counter for level of depth that is rendering.
+	 *
+	 * @var int
+	 */
+	protected $level = 0;
+
+	/**
 	 * Constructor
 	 *
 	 * @param JRegistry $params: module parameters
@@ -101,7 +108,7 @@ class modMenubranchHelper {
 	 * @since 0.1
 	 */
 
-	public function render($item, $containerTag = '<ul>', $containerClass = 'menu', $itemTag = '<li>', $level = 0) {
+	public function render($item, $containerTag = '<ul>', $containerClass = 'menu', $itemTag = '<li>', $level) {
 
 		$itemOpenTag       = str_replace('>', ' class="' . $item->class . '">', $itemTag);
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
