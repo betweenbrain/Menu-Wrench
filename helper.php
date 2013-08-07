@@ -71,12 +71,17 @@ class modMenubranchHelper {
 			//Build object classes
 			$item->class = 'item' . $item->id . ' ' . $item->alias;
 
+			// Add parent class to all parents
 			if (isset($item->children)) {
 				$item->class .= ' parent';
 			}
+
+			// Add current class to specific item
 			if ($item->id == $this->active) {
 				$item->class .= ' current';
 			}
+
+			// Add active class to tree
 			if (in_array($item->id, $this->active->tree)) {
 				$item->class .= ' active';
 			}
