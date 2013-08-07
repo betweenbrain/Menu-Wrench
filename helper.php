@@ -30,7 +30,7 @@ class modMenubranchHelper {
 	public function __construct($params) {
 		$this->app    = JFactory::getApplication();
 		$this->menu   = $this->app->getMenu();
-		$this->active = $this->menu->getActive()->id;
+		$this->active = $this->menu->getActive();
 		$this->params = $params;
 	}
 
@@ -77,7 +77,7 @@ class modMenubranchHelper {
 			}
 
 			// Add current class to specific item
-			if ($item->id == $this->active) {
+			if ($item->id == $this->active->id) {
 				$item->class .= ' current';
 			}
 
