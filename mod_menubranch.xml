@@ -13,6 +13,7 @@
 
 	<files>
 		<filename module="mod_menubranch">mod_menubranch.php</filename>
+		<filename>helper.php</filename>
 		<folder>elements</folder>
 		<folder>tmpl</folder>
 	</files>
