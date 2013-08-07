@@ -3,12 +3,12 @@
          version="2.5"
          method="upgrade">
 	<name>Menu Branch</name>
-	<creationDate>August 6, 2013</creationDate>
+	<creationDate>August 7, 2013</creationDate>
 	<author>Matt Thomas</author>
 	<authorUrl>http://betweenbrain.com</authorUrl>
 	<copyright>Copyright (C) 2013 betweenbrain llc. All rights reserved.</copyright>
 	<license>GNU General Public License version 3, or later.</license>
-	<version>0.1</version>
+	<version>0.2</version>
 	<description>MOD_MENU_BRANCH_DESC</description>
 
 	<files>
