@@ -77,6 +77,9 @@ class modMenubranchHelper {
 			if ($item->id == $this->active) {
 				$item->class .= ' current';
 			}
+			if (in_array($item->id, $this->active->tree)) {
+				$item->class .= ' active';
+			}
 		}
 
 		return $items;
@@ -85,10 +88,10 @@ class modMenubranchHelper {
 	/**
 	 * Renders the menu
 	 *
-	 * @param $item: the menu item
-	 * @param string $containerTag: optional, declare a different container HTML element
+	 * @param $item                 : the menu item
+	 * @param string $containerTag  : optional, declare a different container HTML element
 	 * @param string $containerClass: optional, declare a different container class
-	 * @param string $itemTag: optional, declare a different menu item HTML element
+	 * @param string $itemTag       : optional, declare a different menu item HTML element
 	 * @return string
 	 *
 	 * @since 0.1
