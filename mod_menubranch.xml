@@ -3,7 +3,7 @@
          version="2.5"
          method="upgrade">
 	<name>Menu Branch</name>
-	<creationDate>July 15, 2013</creationDate>
+	<creationDate>August 6, 2013</creationDate>
 	<author>Matt Thomas</author>
 	<authorUrl>http://betweenbrain.com</authorUrl>
 	<copyright>Copyright (C) 2013 betweenbrain llc. All rights reserved.</copyright>
@@ -33,6 +33,5 @@
 		       default=""
 		       label="Module Class Suffix"
 		       description="PARAMMODULECLASSSUFFIX"/>
-
 	</params>
 </install>
