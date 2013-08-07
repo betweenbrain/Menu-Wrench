@@ -2,36 +2,36 @@
 <install type="module"
          version="2.5"
          method="upgrade">
-	<name>Menu Branch</name>
+	<name>Menu Wrench</name>
 	<creationDate>August 7, 2013</creationDate>
 	<author>Matt Thomas</author>
 	<authorUrl>http://betweenbrain.com</authorUrl>
 	<copyright>Copyright (C) 2013 betweenbrain llc. All rights reserved.</copyright>
 	<license>GNU General Public License version 3, or later.</license>
 	<version>0.2</version>
-	<description>MOD_MENU_BRANCH_DESC</description>
+	<description>MOD_MENU_WRENCH_DESC</description>
 
 	<files>
-		<filename module="mod_menubranch">mod_menubranch.php</filename>
+		<filename module="mod_menuwrench">mod_menuwrench.php</filename>
 		<filename>helper.php</filename>
 		<folder>elements</folder>
 		<folder>tmpl</folder>
 	</files>
 
 	<languages>
-		<language tag="en-GB">language/en-GB/en-GB.mod_menubranch.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.mod_menuwrench.ini</language>
 	</languages>
 
-	<params addpath="/modules/mod_menubranch/elements">
+	<params addpath="/modules/mod_menuwrench/elements">
 		<param name="parentItems"
 		       type="menuitems"
-		       label="MOD_MENU_BRANCH_PARENT_LABEL"
-		       description="MOD_MENU_BRANCH_PARENT_DESC"/>
+		       label="MOD_MENU_WRENCH_PARENT_LABEL"
+		       description="MOD_MENU_WRENCH_PARENT_DESC"/>
 		<param name="depth"
 		       type="text"
 		       default="10"
-		       label="MOD_MENU_BRANCH_DEPTH_LABEL"
-		       description="MOD_MENU_BRANCH_DEPTH_DESC"/>
+		       label="MOD_MENU_WRENCH_DEPTH_LABEL"
+		       description="MOD_MENU_WRENCH_DEPTH_DESC"/>
 		<param name="moduleclass_sfx"
 		       type="text"
 		       default=""

@@ -4,12 +4,12 @@
  * File       helper.php
  * Created    8/6/13 3:41 PM
  * Author     Matt Thomas | matt@betweenbrain.com | http://betweenbrain.com
- * Support    https://github.com/betweenbrain/Menu-Branch-Module/issues
+ * Support    https://github.com/betweenbrain/Menu-Wrench/issues
  * Copyright  Copyright (C) 2013 betweenbrain llc. All Rights Reserved.
  * License    GNU GPL v3 or later
  */
 
-class modMenubranchHelper {
+class modMenuwrenchHelper {
 
 	/**
 	 * Constructor
