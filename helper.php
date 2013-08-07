@@ -12,15 +12,6 @@
 class modMenubranchHelper {
 
 	/**
-	 * Nulls module output every time the helper is called
-	 *
-	 * @var null
-	 * @since 0.1
-	 *
-	 */
-	protected $output = NULL;
-
-	/**
 	 * Constructor
 	 *
 	 * @param JRegistry $params: module parameters
@@ -50,12 +41,16 @@ class modMenubranchHelper {
 			$parentItems = str_split($parentItems, strlen($parentItems));
 		}
 
-		// Build menu hierarchy
+		/**
+		 * Builds menu hierarchy by nesting children in parent object's 'children' property
+		 */
 		foreach ($items as $item) {
 			if ($item->parent != 0) {
-				//
+				// Reset array counter to last tree item, which is self
 				end($item->tree);
+				// Set $previous to next to last tree item value
 				$previous = prev($item->tree);
+				// If $previous is not self, it's a parent
 				if ($previous != $item->id) {
 					$items[$previous]->children[$item->id] = $item;
 				}
@@ -63,12 +58,15 @@ class modMenubranchHelper {
 		}
 
 		foreach ($items as $key => $item) {
-			// Remove non-parent menu item objects
+
+			// Remove non-selected menu item objects
 			if (!in_array($key, $parentItems)) {
 				unset($items[$key]);
 			}
 
-			//Build object classes
+			/**
+			 * Builds object classes
+			 */
 			$item->class = 'item' . $item->id . ' ' . $item->alias;
 
 			// Add parent class to all parents
@@ -81,7 +79,7 @@ class modMenubranchHelper {
 				$item->class .= ' current';
 			}
 
-			// Add active class to tree
+			// Add active class to all items in active branch
 			if (in_array($item->id, $this->active->tree)) {
 				$item->class .= ' active';
 			}
@@ -97,6 +95,7 @@ class modMenubranchHelper {
 	 * @param string $containerTag  : optional, declare a different container HTML element
 	 * @param string $containerClass: optional, declare a different container class
 	 * @param string $itemTag       : optional, declare a different menu item HTML element
+	 * @param int $level            : counter for level of depth that is rendering.
 	 * @return string
 	 *
 	 * @since 0.1
