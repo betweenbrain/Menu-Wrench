@@ -100,9 +100,9 @@ class modMenubranchHelper {
 		$itemCloseTag = str_replace('<', '</', $itemTag);
 
 		if ($item->type == 'separator') {
-			$this->output .= $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
+			$this->output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
 		} else {
-			$this->output .= $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
+			$this->output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
 		}
 		$this->output .= $this->recurse($item, $containerTag, $containerClass, $itemTag);
 		$this->output .= $itemCloseTag;
