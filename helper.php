@@ -102,12 +102,13 @@ class modMenubranchHelper {
 	 * @since 0.1
 	 */
 
-	public function render($item, $containerTag = '<ul>', $containerClass = 'menu', $itemTag = '<li>') {
+	public function render($item, $containerTag = '<ul>', $containerClass = 'menu', $itemTag = '<li>', $level = 0) {
 
 		$itemOpenTag       = str_replace('>', ' class="' . $item->class . '">', $itemTag);
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
+		$depth             = htmlspecialchars($this->params->get('depth'));
 
 		if ($item->type == 'separator') {
 			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
@@ -115,13 +116,15 @@ class modMenubranchHelper {
 			$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
 		}
 
-		if (isset($item->children)) {
+		$level++;
+
+		if (isset($item->children) && $level <= $depth) {
 
 			$output .= $containerOpenTag;
 
 			foreach ($item->children as $item) {
 
-				$output .= $this->render($item, $containerTag, $containerClass, $itemTag);
+				$output .= $this->render($item, $containerTag, $containerClass, $itemTag, $level);
 			}
 			$output .= $itemCloseTag;
 			$output .= $containerCloseTag;
