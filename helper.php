@@ -9,6 +9,8 @@
  * License    GNU GPL v3 or later
  */
 
+jimport('joomla.application.menu');
+
 class modMenuwrenchHelper {
 
 	/**
@@ -34,7 +36,9 @@ class modMenuwrenchHelper {
 	 */
 	function getBranches() {
 		$parentItems = $this->params->get('parentItems');
-		$items       = $this->menu->items;
+		// http://stackoverflow.com/questions/3787669/how-to-get-specific-menu-items-from-joomla/10218419#10218419
+		// TODO: This throws "Warning: Missing argument 1[2] for JMenuSite::getItems()
+		$items = @ $this->menu->getItems();
 
 		// Convert parentItems to an array if only one item is selected
 		if (!is_array($parentItems)) {
@@ -42,24 +46,25 @@ class modMenuwrenchHelper {
 		}
 
 		/**
-		 * Builds menu hierarchy by nesting children in parent object's 'children' property
+		 * Builds menu hierarchy by nesting children in parent object's 'children' property.
+		 * First builds an item Id based array, then discards old nodes.
 		 */
-		foreach ($items as $item) {
-			if ($item->parent != 0) {
-				// Reset array counter to last tree item, which is self
-				end($item->tree);
-				// Set $previous to next to last tree item value
-				$previous = prev($item->tree);
-				// If $previous is not self, it's a parent
-				if ($previous != $item->id) {
-					$items[$previous]->children[$item->id] = $item;
-				}
+		foreach ($items as $key => $item) {
+
+			$items[$item->id] = $item;
+
+			unset($items[$key]);
+
+			if ($item->parent_id != 1) {
+				$items[$item->parent_id]->children[$item->id] = $item;
 			}
 		}
 
 		foreach ($items as $key => $item) {
 
-			// Remove non-selected menu item objects
+			/**
+			 * Remove non-selected menu item objects
+			 */
 			if (!in_array($key, $parentItems)) {
 				unset($items[$key]);
 			}
@@ -112,7 +117,7 @@ class modMenuwrenchHelper {
 		if ($item->type == 'separator') {
 			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
 		} else {
-			$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
+			$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->title . '</a>';
 		}
 
 		$level++;
