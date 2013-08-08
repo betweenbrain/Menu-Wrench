@@ -34,7 +34,7 @@ class modMenuwrenchHelper {
 	 */
 	function getBranches() {
 		$parentItems = $this->params->get('parentItems');
-		$items       = $this->menu->_items;
+		$items       = $this->menu->items;
 
 		// Convert parentItems to an array if only one item is selected
 		if (!is_array($parentItems)) {
