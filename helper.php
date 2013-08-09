@@ -37,8 +37,7 @@ class modMenuwrenchHelper {
 	function getBranches() {
 		$parentItems = $this->params->get('parentItems');
 		// http://stackoverflow.com/questions/3787669/how-to-get-specific-menu-items-from-joomla/10218419#10218419
-		// TODO: This throws "Warning: Missing argument 1[2] for JMenuSite::getItems()
-		$items = @ $this->menu->getItems();
+		$items = $this->menu->getItems(NULL, NULL);
 
 		// Convert parentItems to an array if only one item is selected
 		if (!is_array($parentItems)) {
