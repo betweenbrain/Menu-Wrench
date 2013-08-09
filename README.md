@@ -9,4 +9,5 @@ Into this:
 ![Rendered as one menu](https://raw.github.com/betweenbrain/Image-Attachments/master/three-items-three-menus-result.png "Rendered as one menu")
 
 ## Known Issues ##
-- Item Sorting: (August 9, 2013 3:57 AM EST) item sorting is fixed to being ID based.
+- Target Window: Not yet supported.
+- Link Type Options (Joomla 2.5): Not yet supported.
