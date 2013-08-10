@@ -49,5 +49,4 @@ Core Menu Module
 - Memory Usage: 14.36 MB (15,056,744 Bytes)
 
 ## Known Issues ##
-- Target Window: Not yet supported.
-- Link Type Options (Joomla 2.5): Not yet supported.
+- Link Type Options (Joomla 2.5): Not supported.
