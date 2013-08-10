@@ -27,7 +27,7 @@ Menu Wrench
 - Application 0.148 seconds (+0.033); 14.37 MB (+0.407) - afterRenderModule mod_menuwrench (Menu Wrench)
 - Memory Usage: 14.45 MB (15,148,576 Bytes)
 
- Core Menu Module
+Core Menu Module
 
 - Application 0.117 seconds (+0.004); 13.97 MB (+0.302) - beforeRenderModule mod_menu (Main Menu)
 - Application 0.132 seconds (+0.014); 14.34 MB (+0.368) - afterRenderModule mod_menu (Main Menu)
