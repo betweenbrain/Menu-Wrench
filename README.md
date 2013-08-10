@@ -11,7 +11,8 @@ Pick and choose any menu item, from any Joomla menu, at any level, and render al
 
 ![Rendered as one menu](https://raw.github.com/betweenbrain/Image-Attachments/master/three-items-three-menus-result.png "Rendered as one menu")
 
-## Features ##
+## Other Features ##
+- Enables you to selectively render sub-menu items as top-level items.
 - Supports view access parameter (ACL)
 - Supports menu item manager ordering
 
