@@ -120,10 +120,23 @@ class modMenuwrenchHelper {
 		$containerCloseTag = str_replace('<', '</', $containerTag);
 		$depth             = htmlspecialchars($this->params->get('depth'));
 
+		switch ($item->browserNav) :
+			default:
+			case 0:
+				$browserNav = '';
+				break;
+			case 1:
+				$browserNav = 'target="_blank"';
+				break;
+			case 2:
+				$browserNav = "onclick=\"window.open(this.href,'targetWindow','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,'" . $this->params->get('window_open') . ");return false;\"";
+				break;
+		endswitch;
+
 		if ($item->type == 'separator') {
 			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
 		} else {
-			$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->title . '</a>';
+			$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->title . '</a>';
 		}
 
 		$level++;
