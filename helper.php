@@ -35,7 +35,8 @@ class modMenuwrenchHelper {
 	 *
 	 */
 	function getBranches() {
-		$parentItems = $this->params->get('parentItems');
+		$parentItems  = $this->params->get('parentItems');
+		$showChildren = $this->params->get('showChildren');
 		// http://stackoverflow.com/questions/3787669/how-to-get-specific-menu-items-from-joomla/10218419#10218419
 		$items = $this->menu->getItems(NULL, NULL);
 
@@ -63,6 +64,7 @@ class modMenuwrenchHelper {
 
 			/**
 			 * Remove non-selected menu item objects
+			 * At this point, all selected items to render are in the first level of the array
 			 */
 			if (!in_array($key, $parentItems)) {
 				unset($items[$key]);
@@ -86,6 +88,11 @@ class modMenuwrenchHelper {
 			// Add active class to all items in active branch
 			if (in_array($item->id, $this->active->tree)) {
 				$item->class .= ' active';
+			}
+
+			// Hide sub-menu items if parameter set to no and parent not active
+			if (!in_array($item->id, $this->active->tree) && $showChildren == 0) {
+				unset($item->children);
 			}
 		}
 
