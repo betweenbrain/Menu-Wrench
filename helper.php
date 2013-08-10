@@ -113,7 +113,7 @@ class modMenuwrenchHelper {
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
-		$depth             = htmlspecialchars($this->params->get('depth'));
+		$depth             = $this->params->get('depth');
 
 		if ($item->type == 'separator') {
 			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
