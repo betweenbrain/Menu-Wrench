@@ -1,12 +1,13 @@
 Joomla! Menu Wrench
 ==================
-Throw a wrench at your Joomla menus!
 
-Turns this:
+Pick and choose any menu item, from any Joomla menu, at any level, and render all of them, and optionally their children, as one menu on the front-end.
+
+**Turns this:**
 
 ![Items from three seperate memus](https://raw.github.com/betweenbrain/Image-Attachments/master/three-items-three-menus.png "Items from three seperate memus")
 
-Into this:
+**Into this:**
 
 ![Rendered as one menu](https://raw.github.com/betweenbrain/Image-Attachments/master/three-items-three-menus-result.png "Rendered as one menu")
 
