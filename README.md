@@ -19,7 +19,7 @@ Performance and memory consumption may vary by implementation.
 
 In a test using Joomla 2.5 sample data, rendering all levels of:
 
-**  Both the Main and About Joomla menus **
+**Both the Main and About Joomla menus**
 
 Menu Wrench
 
@@ -35,7 +35,7 @@ Menu Wrench
 - Application 0.193 seconds (+0.061); 14.67 MB (+0.341) - afterRenderModule mod_menu (About Joomla)
 - Memory Usage: 14.71 MB (15,427,464 Bytes)
 
-** Only the Main menu **
+**Only the Main menu**
 
 Menu Wrench
 
