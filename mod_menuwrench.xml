@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module"
+           version="2.5"
+           method="upgrade">
+	<name>Menu Wrench</name>
+	<creationDate>August 7, 2013</creationDate>
+	<author>Matt Thomas</author>
+	<authorUrl>http://betweenbrain.com</authorUrl>
+	<copyright>Copyright (C) 2013 betweenbrain llc. All rights reserved.</copyright>
+	<license>GNU General Public License version 3, or later.</license>
+	<version>0.2</version>
+	<description>MOD_MENU_WRENCH_DESC</description>
+
+	<files>
+		<filename module="mod_menuwrench">mod_menuwrench.php</filename>
+		<filename>helper.php</filename>
+		<folder>elements</folder>
+		<folder>tmpl</folder>
+	</files>
+
+	<languages>
+		<language tag="en-GB">language/en-GB/en-GB.mod_menuwrench.ini</language>
+	</languages>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="parentItems"
+				       type="menuitem"
+				       multiple="true"
+				       size="25"
+				       label="MOD_MENU_WRENCH_PARENT_LABEL"
+				       description="MOD_MENU_WRENCH_PARENT_DESC"/>
+
+				<field name="depth"
+				       type="list"
+				       default="10"
+				       label="MOD_MENU_WRENCH_DEPTH_LABEL"
+				       description="MOD_MENU_WRENCH_DEPTH_DESC">
+					<option value="0">0</option>
+					<option value="1">J1</option>
+					<option value="2">J2</option>
+					<option value="3">J3</option>
+					<option value="4">J4</option>
+					<option value="5">J5</option>
+					<option value="6">J6</option>
+					<option value="7">J7</option>
+					<option value="8">J8</option>
+					<option value="9">J9</option>
+					<option value="10">J10</option>
+				</field>
+
+				<field name="showChildren"
+				       type="radio"
+				       default="1"
+				       label="MOD_MENU_WRENCH_SHOW_CHILDREN_LABEL"
+				       description="MOD_MENU_WRENCH_SHOW_CHILDREN_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field name="moduleclass_sfx"
+				       type="text"
+				       default=""
+				       label="Module Class Suffix"
+				       description="PARAMMODULECLASSSUFFIX"/>
+			</fieldset>
+
+		</fields>
+	</config>
+</extension>
