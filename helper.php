@@ -33,8 +33,9 @@ class modMenuwrenchHelper {
 	 *
 	 */
 	function getBranches() {
-		$parentItems = $this->params->get('parentItems');
-		$items       = $this->menu->_items;
+		$items        = $this->menu->_items;
+		$parentItems  = $this->params->get('parentItems');
+		$showChildren = $this->params->get('showChildren');
 
 		// Convert parentItems to an array if only one item is selected
 		if (!is_array($parentItems)) {
@@ -82,6 +83,11 @@ class modMenuwrenchHelper {
 			// Add active class to all items in active branch
 			if (in_array($item->id, $this->active->tree)) {
 				$item->class .= ' active';
+			}
+
+			// Hide sub-menu items if parameter set to no and parent not active
+			if (!in_array($item->id, $this->active->tree) && $showChildren == 0) {
+				unset($item->children);
 			}
 		}
 
