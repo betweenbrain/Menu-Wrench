@@ -16,6 +16,9 @@ Pick and choose any menu item, from any Joomla menu, at any level, and render al
 - Supports view access parameter (ACL)
 - Supports menu item manager ordering
 
+## Disclaimer ##
+The Joomla Menu Wrench module takes a vastly different approach to rendering menu items. Sometimes, vastly different approaches don't always work, sometimes they do. Sometimes they lead to other ideas. In any case, keep this in mind when experimenting with this module.
+
 ## Performance ##
 Performance and memory consumption may vary by implementation.
 
