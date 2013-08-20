@@ -19,6 +19,7 @@ Pick and choose any menu item, from any Joomla menu, at any level, and render al
 ## Disclaimer ##
 The Joomla Menu Wrench module takes a vastly different approach to rendering menu items. Sometimes, vastly different approaches don't always work, sometimes they do. Sometimes they lead to other ideas. In any case, keep this in mind when experimenting with this module.
 
+<section id="performance">
 ## Performance ##
 Performance and memory consumption may vary by implementation.
 
@@ -68,6 +69,8 @@ Core Menu Module
 - Application 0.480 seconds (+0.335); 19.68 MB (+1.172) - afterRenderModule mod_menu
 - Application 0.499 seconds (+0.006); 19.72 MB (+0.045) - afterRender
 - Memory Usage: 19.72 MB (20,682,064 Bytes)
+
+</section>
 
 ## Known Issues ##
 - Link Type Options (Joomla 2.5): Not supported.
