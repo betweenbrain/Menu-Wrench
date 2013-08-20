@@ -54,7 +54,7 @@ Core Menu Module
 - Application 0.135 seconds (+0.015); 14.33 MB (+0.368) - afterRenderModule mod_menu
 - Memory Usage: 14.36 MB (15,056,744 Bytes)
 
-** 1,000 test menu items**
+**1,000 test menu items**
 
 Menu Wrench
 
