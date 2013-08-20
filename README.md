@@ -44,14 +44,30 @@ Core Menu Module
 
 Menu Wrench
 
-- Application 0.109 seconds (+0.004); 13.96 MB (+0.298) - beforeRenderModule mod_menuwrench (Menu Wrench)
-- Application 0.121 seconds (+0.012); 14.27 MB (+0.305) - afterRenderModule mod_menuwrench (Menu Wrench)
+- Application 0.109 seconds (+0.004); 13.96 MB (+0.298) - beforeRenderModule mod_menuwrench
+- Application 0.121 seconds (+0.012); 14.27 MB (+0.305) - afterRenderModule mod_menuwrench
 - Memory Usage: 14.31 MB (15,002,584 Bytes)
 
 Core Menu Module
-- Application 0.121 seconds (+0.004); 13.96 MB (+0.299) - beforeRenderModule mod_menu (Main Menu)
-- Application 0.135 seconds (+0.015); 14.33 MB (+0.368) - afterRenderModule mod_menu (Main Menu)
+
+- Application 0.121 seconds (+0.004); 13.96 MB (+0.299) - beforeRenderModule mod_menu
+- Application 0.135 seconds (+0.015); 14.33 MB (+0.368) - afterRenderModule mod_menu
 - Memory Usage: 14.36 MB (15,056,744 Bytes)
+
+** 1,000 test menu items**
+
+Menu Wrench
+
+- Application 0.148 seconds (+0.005); 18.76 MB (+0.546) - beforeRenderModule mod_menuwrench
+- Application 0.255 seconds (+0.107); 19.54 MB (+0.779) - afterRenderModule mod_menuwrench
+- Application 0.263 seconds (+0.009); 19.14 MB (-0.399) - afterRender
+- Memory Usage: 19.16 MB (20,091,568 Bytes)
+
+Core Menu Module
+- Application 0.145 seconds (+0.005); 18.51 MB (+0.290) - beforeRenderModule mod_menu
+- Application 0.480 seconds (+0.335); 19.68 MB (+1.172) - afterRenderModule mod_menu
+- Application 0.499 seconds (+0.006); 19.72 MB (+0.045) - afterRender
+- Memory Usage: 19.72 MB (20,682,064 Bytes)
 
 ## Known Issues ##
 - Link Type Options (Joomla 2.5): Not supported.
