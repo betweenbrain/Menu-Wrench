@@ -27,6 +27,10 @@
 		       type="menuitems"
 		       label="MOD_MENU_WRENCH_PARENT_LABEL"
 		       description="MOD_MENU_WRENCH_PARENT_DESC"/>
+		<param name="pinnedItems"
+		       type="menuitems"
+		       label="MOD_MENU_WRENCH_PINNED_LABEL"
+		       description="MOD_MENU_WRENCH_PINNED_DESC"/>
 		<param name="depth"
 		       type="text"
 		       default="10"

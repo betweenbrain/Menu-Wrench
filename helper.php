@@ -134,8 +134,13 @@ class modMenuwrenchHelper {
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
 		$alphaChildren     = $this->params->get('alphaChildren');
-		$depth             = htmlspecialchars($this->params->get('depth'));
 		$columns           = htmlspecialchars($this->params->get('columns'));
+		$depth             = htmlspecialchars($this->params->get('depth'));
+		$pinnedItems       = $this->params->get('pinnedItems');
+
+		if (!is_array($pinnedItems)) {
+			$pinnedItems = str_split($pinnedItems, strlen($pinnedItems));
+		}
 
 		if ($item->type == 'separator') {
 			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
@@ -145,7 +150,7 @@ class modMenuwrenchHelper {
 
 		$level++;
 
-		if (isset($item->children) && $level <= $depth) {
+		if (isset($item->children) && $level <= $depth && !in_array($item->id, $pinnedItems)) {
 
 			$output .= $containerOpenTag;
 
