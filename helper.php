@@ -85,7 +85,33 @@ class modMenuwrenchHelper {
 			}
 		}
 
+		$this->countChildren($items);
+
 		return $items;
+	}
+
+	/**
+	 * Recursively count children for later splitting
+	 *
+	 * @param $items
+	 * @return mixed
+	 */
+
+	private function countChildren($items) {
+
+		foreach ($items as $item) {
+			if (isset($item->children)) {
+				$item->childrentotal = count($item->children);
+				foreach ($item->children as $item) {
+					if (isset($item->children)) {
+						$item->childrentotal = count($item->children);
+						$this->countChildren($item);
+					}
+				}
+			} else {
+				return $items;
+			}
+		}
 	}
 
 	/**
@@ -107,7 +133,9 @@ class modMenuwrenchHelper {
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
+		$alphaChildren     = $this->params->get('alphaChildren');
 		$depth             = htmlspecialchars($this->params->get('depth'));
+		$columns           = htmlspecialchars($this->params->get('columns'));
 
 		if ($item->type == 'separator') {
 			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
@@ -121,9 +149,33 @@ class modMenuwrenchHelper {
 
 			$output .= $containerOpenTag;
 
+			if ($columns > 0 && isset($item->childrentotal)) {
+				// Calculate divisor based on this item's total children and parameter
+				$divisor = ceil($item->childrentotal / $columns);
+			}
+
+			// Zero counter for calculating column split
+			$index = 0;
+
+			// Alphabetize children menu items
+			if ($alphaChildren == '1') {
+				usort($item->children, function ($a, $b) {
+					return strcmp(strtolower($a->name), strtolower($b->name));
+				});
+			}
+
 			foreach ($item->children as $item) {
 
+				if ($columns > 0) {
+					if ($index > 0 && fmod($index, $divisor) == 0) {
+						$output .= $containerCloseTag . $containerOpenTag;
+					}
+				}
+
 				$output .= $this->render($item, $containerTag, $containerClass, $itemTag, $level);
+
+				// Increment, rinse, repeat.
+				$index++;
 			}
 			$output .= $itemCloseTag;
 			$output .= $containerCloseTag;
