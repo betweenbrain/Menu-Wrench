@@ -121,25 +121,25 @@ class modMenuwrenchHelper {
 	 * @param string $containerTag  : optional, declare a different container HTML element
 	 * @param string $containerClass: optional, declare a different container class
 	 * @param string $itemTag       : optional, declare a different menu item HTML element
-	 * @param int $level            : counter for level of depth that is rendering.
+	 * @param int $currentDepth     : counter for level of depth that is rendering.
 	 * @return string
 	 *
-	 * @since 0.1
+	 * @since    0.1
 	 */
 
-	public function render($item, $containerTag = '<ul>', $containerClass = 'menu', $itemTag = '<li>', $level = 0) {
+	public function render($item, $containerTag = '<ul>', $containerClass = 'menu', $itemTag = '<li>', $currentDepth = 0) {
 
 		$itemOpenTag       = str_replace('>', ' class="' . $item->class . '">', $itemTag);
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
-		$alphaChildren     = $this->params->get('alphaChildren');
-		$columns           = htmlspecialchars($this->params->get('columns'));
-		$depth             = htmlspecialchars($this->params->get('depth'));
-		$pinnedItems       = $this->params->get('pinnedItems');
+		$alphaSortChildren     = $this->params->get('alphaSortChildren');
+		$submenuSplits           = htmlspecialchars($this->params->get('submenuSplits'));
+		$renderDepth       = htmlspecialchars($this->params->get('renderDepth'));
+		$parentOnlyItems       = $this->params->get('parentOnlyItems');
 
-		if (!is_array($pinnedItems)) {
-			$pinnedItems = str_split($pinnedItems, strlen($pinnedItems));
+		if (!is_array($parentOnlyItems)) {
+			$parentOnlyItems = str_split($parentOnlyItems, strlen($parentOnlyItems));
 		}
 
 		if ($item->type == 'separator') {
@@ -148,22 +148,22 @@ class modMenuwrenchHelper {
 			$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
 		}
 
-		$level++;
+		$currentDepth++;
 
-		if (isset($item->children) && $level <= $depth && !in_array($item->id, $pinnedItems)) {
+		if (isset($item->children) && $currentDepth <= $renderDepth && !in_array($item->id, $parentOnlyItems)) {
 
 			$output .= $containerOpenTag;
 
-			if ($columns > 0 && isset($item->childrentotal)) {
+			if ($submenuSplits > 0 && isset($item->childrentotal)) {
 				// Calculate divisor based on this item's total children and parameter
-				$divisor = ceil($item->childrentotal / $columns);
+				$divisor = ceil($item->childrentotal / $submenuSplits);
 			}
 
 			// Zero counter for calculating column split
 			$index = 0;
 
 			// Alphabetize children menu items
-			if ($alphaChildren == '1') {
+			if ($alphaSortChildren == '1') {
 				usort($item->children, function ($a, $b) {
 					return strcmp(strtolower($a->name), strtolower($b->name));
 				});
@@ -171,13 +171,13 @@ class modMenuwrenchHelper {
 
 			foreach ($item->children as $item) {
 
-				if ($columns > 0) {
+				if ($submenuSplits > 0) {
 					if ($index > 0 && fmod($index, $divisor) == 0) {
 						$output .= $containerCloseTag . $containerOpenTag;
 					}
 				}
 
-				$output .= $this->render($item, $containerTag, $containerClass, $itemTag, $level);
+				$output .= $this->render($item, $containerTag, $containerClass, $itemTag, $currentDepth);
 
 				// Increment, rinse, repeat.
 				$index++;
