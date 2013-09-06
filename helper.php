@@ -33,12 +33,12 @@ class modMenuwrenchHelper {
 	 *
 	 */
 	function getBranches() {
-		$parentItems = $this->params->get('parentItems');
-		$items       = $this->menu->_items;
+		$renderedItems = $this->params->get('renderedItems');
+		$items         = $this->menu->_items;
 
-		// Convert parentItems to an array if only one item is selected
-		if (!is_array($parentItems)) {
-			$parentItems = str_split($parentItems, strlen($parentItems));
+		// Convert renderedItems to an array if only one item is selected
+		if (!is_array($renderedItems)) {
+			$renderedItems = str_split($renderedItems, strlen($renderedItems));
 		}
 
 		/**
@@ -60,7 +60,7 @@ class modMenuwrenchHelper {
 		foreach ($items as $key => $item) {
 
 			// Remove non-selected menu item objects
-			if (!in_array($key, $parentItems)) {
+			if (!in_array($key, $renderedItems)) {
 				unset($items[$key]);
 			}
 
@@ -133,13 +133,14 @@ class modMenuwrenchHelper {
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
-		$alphaSortChildren     = $this->params->get('alphaSortChildren');
-		$submenuSplits           = htmlspecialchars($this->params->get('submenuSplits'));
+		$alphaSortSubmenu  = $this->params->get('alphaSortSubmenu');
+		$splitMinimum      = htmlspecialchars($this->params->get('splitMinimum'));
+		$submenuSplits     = htmlspecialchars($this->params->get('submenuSplits'));
 		$renderDepth       = htmlspecialchars($this->params->get('renderDepth'));
-		$parentOnlyItems       = $this->params->get('parentOnlyItems');
+		$noSubmenuItems    = $this->params->get('noSubmenuItems');
 
-		if (!is_array($parentOnlyItems)) {
-			$parentOnlyItems = str_split($parentOnlyItems, strlen($parentOnlyItems));
+		if (!is_array($noSubmenuItems)) {
+			$noSubmenuItems = str_split($noSubmenuItems, strlen($noSubmenuItems));
 		}
 
 		if ($item->type == 'separator') {
@@ -150,20 +151,22 @@ class modMenuwrenchHelper {
 
 		$currentDepth++;
 
-		if (isset($item->children) && $currentDepth <= $renderDepth && !in_array($item->id, $parentOnlyItems)) {
+		if (isset($item->children) && $currentDepth <= $renderDepth && !in_array($item->id, $noSubmenuItems)) {
 
 			$output .= $containerOpenTag;
 
-			if ($submenuSplits > 0 && isset($item->childrentotal)) {
-				// Calculate divisor based on this item's total children and parameter
-				$divisor = ceil($item->childrentotal / $submenuSplits);
+			if (count($item->childrentotal) >= $splitMinimum) {
+				if ($submenuSplits > 0 && isset($item->childrentotal)) {
+					// Calculate divisor based on this item's total children and parameter
+					$divisor = ceil($item->childrentotal / $submenuSplits);
+				}
 			}
 
 			// Zero counter for calculating column split
 			$index = 0;
 
 			// Alphabetize children menu items
-			if ($alphaSortChildren == '1') {
+			if ($alphaSortSubmenu == '1') {
 				usort($item->children, function ($a, $b) {
 					return strcmp(strtolower($a->name), strtolower($b->name));
 				});
@@ -171,9 +174,11 @@ class modMenuwrenchHelper {
 
 			foreach ($item->children as $item) {
 
-				if ($submenuSplits > 0) {
-					if ($index > 0 && fmod($index, $divisor) == 0) {
-						$output .= $containerCloseTag . $containerOpenTag;
+				if (count($item->childrentotal) >= $splitMinimum) {
+					if ($submenuSplits > 0) {
+						if ($index > 0 && fmod($index, $divisor) == 0) {
+							$output .= $containerCloseTag . $containerOpenTag;
+						}
 					}
 				}
 
