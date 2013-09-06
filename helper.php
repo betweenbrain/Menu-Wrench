@@ -159,6 +159,8 @@ class modMenuwrenchHelper {
 				if ($submenuSplits > 0) {
 					// Set split flag
 					$splitSubmenus = TRUE;
+					// Split markup
+					$output .= '<div>';
 					// Calculate divisor based on this item's total children and parameter
 					$divisor = ceil($item->childrentotal / $submenuSplits);
 				}
@@ -178,7 +180,7 @@ class modMenuwrenchHelper {
 
 				if ($splitSubmenus && $submenuSplits > 0) {
 					if ($index > 0 && fmod($index, $divisor) == 0) {
-						$output .= $containerCloseTag . $containerOpenTag;
+						$output .= '</div><div>';
 					}
 				}
 
@@ -188,6 +190,9 @@ class modMenuwrenchHelper {
 				$index++;
 			}
 			$output .= $itemCloseTag;
+			if ($splitSubmenus && $submenuSplits > 0) {
+				$output .= '</div>';
+			}
 			$output .= $containerCloseTag;
 		}
 
