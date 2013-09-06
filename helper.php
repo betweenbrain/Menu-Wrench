@@ -33,7 +33,7 @@ class modMenuwrenchHelper {
 	 *
 	 */
 	function getBranches() {
-		$renderedItems = $this->params->get('renderedItems');
+		$renderedItems = $this->params->get('renderedItems', '0');
 		$items         = $this->menu->_items;
 
 		// Convert renderedItems to an array if only one item is selected
@@ -133,11 +133,11 @@ class modMenuwrenchHelper {
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
-		$alphaSortSubmenu  = $this->params->get('alphaSortSubmenu');
-		$splitMinimum      = htmlspecialchars($this->params->get('splitMinimum'));
-		$submenuSplits     = htmlspecialchars($this->params->get('submenuSplits'));
-		$renderDepth       = htmlspecialchars($this->params->get('renderDepth'));
-		$noSubmenuItems    = $this->params->get('noSubmenuItems');
+		$alphaSortSubmenu  = $this->params->get('alphaSortSubmenu', '0');
+		$splitMinimum      = htmlspecialchars($this->params->get('splitMinimum', '10'));
+		$submenuSplits     = htmlspecialchars($this->params->get('submenuSplits', '0'));
+		$renderDepth       = htmlspecialchars($this->params->get('renderDepth', '10'));
+		$noSubmenuItems    = $this->params->get('noSubmenuItems', '0');
 
 		if (!is_array($noSubmenuItems)) {
 			$noSubmenuItems = str_split($noSubmenuItems, strlen($noSubmenuItems));

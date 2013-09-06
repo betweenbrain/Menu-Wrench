@@ -44,10 +44,10 @@
 		       description="MOD_MENU_WRENCH_SPLIT_MIN_DESC"/>
 		<param name="alphaSortSubmenu"
 		       type="list"
-		       default=""
+		       default="0"
 		       label="MOD_MENU_WRENCH_ALPHA_SORT_SUBMENU_LABEL"
 		       description="MOD_MENU_WRENCH_ALPHA_SORT_SUBMENU_DESC">
-			<option value="">MOD_MENU_WRENCH_NO</option>
+			<option value="0">MOD_MENU_WRENCH_NO</option>
 			<option value="1">MOD_MENU_WRENCH_YES</option>
 		</param>
 		<param name="noSubmenuItems"
