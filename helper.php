@@ -134,9 +134,9 @@ class modMenuwrenchHelper {
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
 		$alphaSortSubmenu  = $this->params->get('alphaSortSubmenu', '0');
-		$splitMinimum      = htmlspecialchars($this->params->get('splitMinimum', '10'));
-		$submenuSplits     = htmlspecialchars($this->params->get('submenuSplits', '0'));
-		$renderDepth       = htmlspecialchars($this->params->get('renderDepth', '10'));
+		$splitMinimum      = $this->params->get('splitMinimum', '10');
+		$submenuSplits     = $this->params->get('submenuSplits', '0');
+		$renderDepth       = $this->params->get('renderDepth', '10');
 		$noSubmenuItems    = $this->params->get('noSubmenuItems', '0');
 
 		if (!is_array($noSubmenuItems)) {
