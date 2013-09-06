@@ -155,8 +155,10 @@ class modMenuwrenchHelper {
 
 			$output .= $containerOpenTag;
 
-			if (count($item->childrentotal) >= $splitMinimum) {
-				if ($submenuSplits > 0 && isset($item->childrentotal)) {
+			if (isset($item->childrentotal) && $item->childrentotal >= $splitMinimum) {
+				if ($submenuSplits > 0) {
+					// Set split flag
+					$splitSubmenus = TRUE;
 					// Calculate divisor based on this item's total children and parameter
 					$divisor = ceil($item->childrentotal / $submenuSplits);
 				}
@@ -174,11 +176,9 @@ class modMenuwrenchHelper {
 
 			foreach ($item->children as $item) {
 
-				if (count($item->childrentotal) >= $splitMinimum) {
-					if ($submenuSplits > 0) {
-						if ($index > 0 && fmod($index, $divisor) == 0) {
-							$output .= $containerCloseTag . $containerOpenTag;
-						}
+				if ($splitSubmenus && $submenuSplits > 0) {
+					if ($index > 0 && fmod($index, $divisor) == 0) {
+						$output .= $containerCloseTag . $containerOpenTag;
 					}
 				}
 
