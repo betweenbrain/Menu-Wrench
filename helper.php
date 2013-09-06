@@ -151,7 +151,7 @@ class modMenuwrenchHelper {
 		if ($item->type == 'separator' || in_array($item->id, $convertToSpan)) {
 			$output = $itemOpenTag . '<span class="separator"><span>' . $item->name . '</span></span>';
 		} else {
-			$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
+			$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/><span>' . $item->name . '</span></a>';
 		}
 
 		$currentDepth++;
