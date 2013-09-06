@@ -2,7 +2,7 @@
 <install type="module"
          version="2.5"
          method="upgrade">
-	<name>Menu Wrench</name>
+	<name>Video - Menu Wrench</name>
 	<creationDate>August 7, 2013</creationDate>
 	<author>Matt Thomas</author>
 	<authorUrl>http://betweenbrain.com</authorUrl>
@@ -12,17 +12,17 @@
 	<description>MOD_MENU_WRENCH_DESC</description>
 
 	<files>
-		<filename module="mod_menuwrench">mod_menuwrench.php</filename>
+		<filename module="mod_videomenuwrench">mod_videomenuwrench.php</filename>
 		<filename>helper.php</filename>
 		<folder>elements</folder>
 		<folder>tmpl</folder>columns
 	</files>
 
 	<languages>
-		<language tag="en-GB">language/en-GB/en-GB.mod_menuwrench.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.mod_videomenuwrench.ini</language>
 	</languages>
 
-	<params addpath="/modules/mod_menuwrench/elements">
+	<params addpath="/modules/mod_videomenuwrench/elements">
 		<param name="renderedItems"
 		       type="menuitems"
 		       label="MOD_MENU_WRENCH_RENDERED_ITEMS_LABEL"
