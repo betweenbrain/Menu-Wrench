@@ -134,6 +134,7 @@ class modMenuwrenchHelper {
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
 		$alphaSortSubmenu  = $this->params->get('alphaSortSubmenu', '0');
+		$convertToSpan     = $this->params->get('convertToSpan', '0');
 		$splitMinimum      = $this->params->get('splitMinimum', '10');
 		$submenuSplits     = $this->params->get('submenuSplits', '0');
 		$renderDepth       = $this->params->get('renderDepth', '10');
@@ -143,7 +144,11 @@ class modMenuwrenchHelper {
 			$noSubmenuItems = str_split($noSubmenuItems, strlen($noSubmenuItems));
 		}
 
-		if ($item->type == 'separator') {
+		if (!is_array($convertToSpan)) {
+			$convertToSpan = str_split($convertToSpan, strlen($convertToSpan));
+		}
+
+		if ($item->type == 'separator' || in_array($item->id, $convertToSpan)) {
 			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
 		} else {
 			$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
