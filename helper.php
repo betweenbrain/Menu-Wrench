@@ -35,14 +35,19 @@ class modMenuwrenchHelper {
 	 *
 	 */
 	function getBranches() {
-		$parentItems  = $this->params->get('parentItems');
-		$showChildren = $this->params->get('showChildren');
+		$renderedItems     = $this->params->get('renderedItems');
+		$showSubmenu = $this->params->get('showSubmenu');
+		$hideSubmenu  = $this->params->get('hideSubmenu');
 		// http://stackoverflow.com/questions/3787669/how-to-get-specific-menu-items-from-joomla/10218419#10218419
 		$items = $this->menu->getItems(NULL, NULL);
 
-		// Convert parentItems to an array if only one item is selected
-		if (!is_array($parentItems)) {
-			$parentItems = str_split($parentItems, strlen($parentItems));
+		// Convert renderedItems to an array if only one item is selected
+		if (!is_array($renderedItems)) {
+			$renderedItems = str_split($renderedItems, strlen($renderedItems));
+		}
+
+		if (!is_array($hideSubmenu)) {
+			$hideSubmenu = str_split($hideSubmenu, strlen($hideSubmenu));
 		}
 
 		/**
@@ -66,7 +71,7 @@ class modMenuwrenchHelper {
 			 * Remove non-selected menu item objects
 			 * At this point, all selected items to render are in the first level of the array
 			 */
-			if (!in_array($key, $parentItems)) {
+			if (!in_array($key, $renderedItems)) {
 				unset($items[$key]);
 			}
 
@@ -91,7 +96,7 @@ class modMenuwrenchHelper {
 			}
 
 			// Hide sub-menu items if parameter set to no and parent not active
-			if (!in_array($item->id, $this->active->tree) && $showChildren == 0) {
+			if ((!in_array($item->id, $this->active->tree) && $showSubmenu == 0) || in_array($item->id, $hideSubmenu)) {
 				unset($item->children);
 			}
 		}
@@ -118,7 +123,7 @@ class modMenuwrenchHelper {
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
-		$depth             = htmlspecialchars($this->params->get('depth'));
+		$renderDepth       = htmlspecialchars($this->params->get('renderDepth'));
 
 		switch ($item->browserNav) :
 			default:
@@ -141,7 +146,7 @@ class modMenuwrenchHelper {
 
 		$level++;
 
-		if (isset($item->children) && $level <= $depth) {
+		if (isset($item->children) && $level <= $renderDepth) {
 
 			$output .= $containerOpenTag;
 
