@@ -12,9 +12,11 @@ Pick and choose any menu item, from any Joomla menu, at any level, and render al
 ![Rendered as one menu](https://raw.github.com/betweenbrain/Image-Attachments/master/three-items-three-menus-result.png "Rendered as one menu")
 
 **Even Turn This"**
+
 ![Multiple levels of the same menu](https://raw.github.com/betweenbrain/Image-Attachments/master/menu-wrench-multi-level.png "Multiple levels of the same menu")
 
 **Into this:**
+
 ![Multiple levels of the same menu](https://raw.github.com/betweenbrain/Image-Attachments/master/menu-wrench-multi-level-result.png "Multiple levels of the same menu")
 
 By selecting to render parent and child menu items, but not chldren of the parents selected.
