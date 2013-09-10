@@ -63,6 +63,9 @@ Core Menu Module
 ## Known Issues ##
 - Link Type Options (Joomla 2.5): Not supported.
 
+Status
+====================
+While Menu Wrench is being used in production, on a limited basis, it's status is still considered beta as backwards incompatible changes may take place.
 
 Stable Master Branch Policy
 ====================
