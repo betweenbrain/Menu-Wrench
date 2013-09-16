@@ -33,8 +33,14 @@ class modMenuwrenchHelper {
 	 *
 	 */
 	function getBranches() {
-		$renderedItems = $this->params->get('renderedItems', '0');
+		$renderedItems = $this->params->get('renderedItems', 0);
+		$showSubmenu   = $this->params->get('showSubmenu', 1);
+		$hideSubmenu   = $this->params->get('hideSubmenu', '0');
 		$items         = $this->menu->_items;
+
+		if (!is_array($hideSubmenu)) {
+			$hideSubmenu = str_split($hideSubmenu, strlen($hideSubmenu));
+		}
 
 		// Convert renderedItems to an array if only one item is selected
 		if (!is_array($renderedItems)) {
@@ -82,6 +88,11 @@ class modMenuwrenchHelper {
 			// Add active class to all items in active branch
 			if (in_array($item->id, $this->active->tree)) {
 				$item->class .= ' active';
+			}
+
+			// Hide sub-menu items if parameter set to no and parent not active
+			if ((!in_array($item->id, $this->active->tree) && $showSubmenu == 0) || in_array($item->id, $hideSubmenu)) {
+				unset($item->children);
 			}
 		}
 
@@ -138,11 +149,6 @@ class modMenuwrenchHelper {
 		$splitMinimum      = $this->params->get('splitMinimum', '10');
 		$submenuSplits     = $this->params->get('submenuSplits', '0');
 		$renderDepth       = $this->params->get('renderDepth', '10');
-		$noSubmenuItems    = $this->params->get('noSubmenuItems', '0');
-
-		if (!is_array($noSubmenuItems)) {
-			$noSubmenuItems = str_split($noSubmenuItems, strlen($noSubmenuItems));
-		}
 
 		if (!is_array($convertToSpan)) {
 			$convertToSpan = str_split($convertToSpan, strlen($convertToSpan));
@@ -156,7 +162,7 @@ class modMenuwrenchHelper {
 
 		$currentDepth++;
 
-		if (isset($item->children) && $currentDepth <= $renderDepth && !in_array($item->id, $noSubmenuItems)) {
+		if (isset($item->children) && $currentDepth <= $renderDepth) {
 
 			$output .= $containerOpenTag;
 
