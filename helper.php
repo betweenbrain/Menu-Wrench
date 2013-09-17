@@ -35,7 +35,7 @@ class modMenuwrenchHelper {
 	function getBranches() {
 		$hideSubmenu   = $this->params->get('hideSubmenu', 0);
 		$items         = $this->menu->_items;
-		$renderedItems = $this->params->get('renderedItems', 0);
+		$renderedItems = $this->params->get('renderedItems');
 		$showSubmenu   = $this->params->get('showSubmenu', 1);
 
 		if (!is_array($hideSubmenu)) {
@@ -46,6 +46,8 @@ class modMenuwrenchHelper {
 		if (!is_array($renderedItems)) {
 			$renderedItems = str_split($renderedItems, strlen($renderedItems));
 		}
+
+		//die('<pre>' . print_r($renderedItems, true) . '</pre>');
 
 		/**
 		 * Builds menu hierarchy by nesting children in parent object's 'children' property
@@ -96,7 +98,33 @@ class modMenuwrenchHelper {
 			}
 		}
 
+		$this->countChildren($items);
+
 		return $items;
+	}
+
+	/**
+	 * Recursively count children for later splitting
+	 *
+	 * @param $items
+	 * @return mixed
+	 */
+
+	private function countChildren($items) {
+
+		foreach ($items as $item) {
+			if (isset($item->children)) {
+				$item->childrentotal = count($item->children);
+				foreach ($item->children as $item) {
+					if (isset($item->children)) {
+						$item->childrentotal = count($item->children);
+						$this->countChildren($item);
+					}
+				}
+			} else {
+				return $items;
+			}
+		}
 	}
 
 	/**
@@ -121,6 +149,8 @@ class modMenuwrenchHelper {
 
 		$alphaSortSubmenu = $this->params->get('alphaSortSubmenu', NULL);
 		$renderDepth      = $this->params->get('renderDepth', 10);
+		$splitMinimum     = $this->params->get('splitMinimum', 10);
+		$submenuSplit    = $this->params->get('submenuSplit', NULL);
 
 		if ($item->type == 'separator') {
 			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
@@ -140,11 +170,35 @@ class modMenuwrenchHelper {
 
 			$output .= $containerOpenTag;
 
+			if (isset($item->childrentotal) && $item->childrentotal >= $splitMinimum && $submenuSplit) {
+				// Set split flag
+				$splitSubmenus = TRUE;
+				// Split markup
+				$output .= $containerTag;
+				// Calculate divisor based on this item's total children and parameter
+				$divisor = ceil($item->childrentotal / $submenuSplit);
+			}
+
+			// Zero counter for calculating column split
+			$index = 0;
+
 			foreach ($item->children as $item) {
 
+				if ($splitSubmenus && $index > 0 && fmod($index, $divisor) == 0) {
+					$output .= $containerCloseTag . $containerTag;
+				}
+
 				$output .= $this->render($item, $containerTag, $containerClass, $itemTag, $currentDepth);
+
+				// Increment, rinse, repeat.
+				$index++;
 			}
 			$output .= $itemCloseTag;
+
+			if ($splitSubmenus) {
+				$output .= $containerCloseTag;
+			}
+
 			$output .= $containerCloseTag;
 		}
 

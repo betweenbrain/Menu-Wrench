@@ -70,6 +70,42 @@
 		       label="MOD_MENU_WRENCH_HIDE_SUBMENU_ITEMS_LABEL"
 		       description="MOD_MENU_WRENCH_HIDE_SUBMENU_ITEMS_DESC"/>
 
+		<param name="submenuSplit"
+		       type="list"
+		       default=""
+		       label="MOD_MENU_WRENCH_SUBMENU_SPLITS_LABEL"
+		       description="MOD_MENU_WRENCH_SUBMENU_SPLITS_DESC">
+			<option value="">J0</option>
+			<option value="1">J1</option>
+			<option value="2">J2</option>
+			<option value="3">J3</option>
+			<option value="4">J4</option>
+			<option value="5">J5</option>
+			<option value="6">J6</option>
+			<option value="7">J7</option>
+			<option value="8">J8</option>
+			<option value="9">J9</option>
+			<option value="10">J10</option>
+		</param>
+
+		<param name="splitMinimum"
+		       type="list"
+		       default="10"
+		       label="MOD_MENU_WRENCH_SPLIT_MIN_LABEL"
+		       description="MOD_MENU_WRENCH_SPLIT_MIN_DESC">
+			<option value="0">J0</option>
+			<option value="1">J1</option>
+			<option value="2">J2</option>
+			<option value="3">J3</option>
+			<option value="4">J4</option>
+			<option value="5">J5</option>
+			<option value="6">J6</option>
+			<option value="7">J7</option>
+			<option value="8">J8</option>
+			<option value="9">J9</option>
+			<option value="10">J10</option>
+		</param>
+
 		<param name="moduleclass_sfx"
 		       type="text"
 		       default=""
