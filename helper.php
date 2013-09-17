@@ -52,8 +52,6 @@ class modMenuwrenchHelper {
 			$renderedItems = str_split($renderedItems, strlen($renderedItems));
 		}
 
-		//die('<pre>' . print_r($hiddenItems, true) . '</pre>');
-
 		/**
 		 * Builds menu hierarchy by nesting children in parent object's 'children' property
 		 */
