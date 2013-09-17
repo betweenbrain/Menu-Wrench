@@ -34,7 +34,7 @@ class modMenuwrenchHelper {
 	 */
 	function getBranches() {
 		$renderedItems = $this->params->get('renderedItems');
-		$items       = $this->menu->_items;
+		$items         = $this->menu->_items;
 
 		// Convert renderedItems to an array if only one item is selected
 		if (!is_array($renderedItems)) {
@@ -95,19 +95,19 @@ class modMenuwrenchHelper {
 	 * @param string $containerTag  : optional, declare a different container HTML element
 	 * @param string $containerClass: optional, declare a different container class
 	 * @param string $itemTag       : optional, declare a different menu item HTML element
-	 * @param int $level            : counter for level of depth that is rendering.
+	 * @param int $currentDepth            : counter for level of depth that is rendering.
 	 * @return string
 	 *
 	 * @since 0.1
 	 */
 
-	public function render($item, $containerTag = '<ul>', $containerClass = 'menu', $itemTag = '<li>', $level = 0) {
+	public function render($item, $containerTag = '<ul>', $containerClass = 'menu', $itemTag = '<li>', $currentDepth = 0) {
 
 		$itemOpenTag       = str_replace('>', ' class="' . $item->class . '">', $itemTag);
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
-		$renderDepth             = htmlspecialchars($this->params->get('renderDepth'));
+		$renderDepth       = $this->params->get('renderDepth', 10);
 
 		if ($item->type == 'separator') {
 			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
@@ -115,15 +115,15 @@ class modMenuwrenchHelper {
 			$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
 		}
 
-		$level++;
+		$currentDepth++;
 
-		if (isset($item->children) && $level <= $renderDepth) {
+		if (isset($item->children) && $currentDepth <= $renderDepth) {
 
 			$output .= $containerOpenTag;
 
 			foreach ($item->children as $item) {
 
-				$output .= $this->render($item, $containerTag, $containerClass, $itemTag, $level);
+				$output .= $this->render($item, $containerTag, $containerClass, $itemTag, $currentDepth);
 			}
 			$output .= $itemCloseTag;
 			$output .= $containerCloseTag;
