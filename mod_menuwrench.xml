@@ -72,10 +72,10 @@
 
 		<param name="submenuSplit"
 		       type="list"
-		       default=""
+		       default="0"
 		       label="MOD_MENU_WRENCH_SUBMENU_SPLITS_LABEL"
 		       description="MOD_MENU_WRENCH_SUBMENU_SPLITS_DESC">
-			<option value="">J0</option>
+			<option value="0">J0</option>
 			<option value="1">J1</option>
 			<option value="2">J2</option>
 			<option value="3">J3</option>

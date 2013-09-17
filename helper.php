@@ -150,7 +150,7 @@ class modMenuwrenchHelper {
 		$alphaSortSubmenu = $this->params->get('alphaSortSubmenu', NULL);
 		$renderDepth      = $this->params->get('renderDepth', 10);
 		$splitMinimum     = $this->params->get('splitMinimum', 10);
-		$submenuSplit    = $this->params->get('submenuSplit', NULL);
+		$submenuSplit     = $this->params->get('submenuSplit', 0);
 
 		if ($item->type == 'separator') {
 			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
@@ -170,7 +170,7 @@ class modMenuwrenchHelper {
 
 			$output .= $containerOpenTag;
 
-			if (isset($item->childrentotal) && $item->childrentotal >= $splitMinimum && $submenuSplit) {
+			if (isset($item->childrentotal) && $item->childrentotal >= $splitMinimum && $submenuSplit > 0) {
 				// Set split flag
 				$splitSubmenus = TRUE;
 				// Split markup
