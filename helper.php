@@ -52,7 +52,7 @@ class modMenuwrenchHelper {
 			$renderedItems = str_split($renderedItems, strlen($renderedItems));
 		}
 
-		//die('<pre>' . print_r($renderedItems, true) . '</pre>');
+		//die('<pre>' . print_r($hiddenItems, true) . '</pre>');
 
 		/**
 		 * Builds menu hierarchy by nesting children in parent object's 'children' property
@@ -79,16 +79,14 @@ class modMenuwrenchHelper {
 
 			// Hide selected items, promote children up one level
 			if (in_array($item->id, $hiddenItems)) {
+
 				if (isset($item->children)) {
 					foreach ($item->children as $child) {
 						$items[$item->parent]->children[$child->id] = $child;
 					}
 				}
 
-				// Remove from parent children array
-				if (isset($items[$item->parent]->children[$item->id])) {
-					unset($items[$item->parent]->children[$item->id]);
-				}
+				$this->recursiveUnset($item->id, $items);
 			}
 
 			/**
@@ -120,6 +118,24 @@ class modMenuwrenchHelper {
 		$this->countChildren($items);
 
 		return $items;
+	}
+
+	/**
+	 * Recursively count children for later splitting
+	 *
+	 * @param $items
+	 * @return mixed
+	 */
+
+	private function recursiveUnset($key, $items) {
+		foreach ($items as $item) {
+			if (isset($item->children)) {
+				if (isset($item->children[$key])) {
+					unset($item->children[$key]);
+				}
+				$this->recursiveUnset($key, $item->children);
+			}
+		}
 	}
 
 	/**
