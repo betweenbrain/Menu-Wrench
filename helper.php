@@ -33,12 +33,12 @@ class modMenuwrenchHelper {
 	 *
 	 */
 	function getBranches() {
-		$parentItems = $this->params->get('parentItems');
+		$renderedItems = $this->params->get('renderedItems');
 		$items       = $this->menu->_items;
 
-		// Convert parentItems to an array if only one item is selected
-		if (!is_array($parentItems)) {
-			$parentItems = str_split($parentItems, strlen($parentItems));
+		// Convert renderedItems to an array if only one item is selected
+		if (!is_array($renderedItems)) {
+			$renderedItems = str_split($renderedItems, strlen($renderedItems));
 		}
 
 		/**
@@ -60,7 +60,7 @@ class modMenuwrenchHelper {
 		foreach ($items as $key => $item) {
 
 			// Remove non-selected menu item objects
-			if (!in_array($key, $parentItems)) {
+			if (!in_array($key, $renderedItems)) {
 				unset($items[$key]);
 			}
 
@@ -107,7 +107,7 @@ class modMenuwrenchHelper {
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
-		$depth             = htmlspecialchars($this->params->get('depth'));
+		$renderDepth             = htmlspecialchars($this->params->get('renderDepth'));
 
 		if ($item->type == 'separator') {
 			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
@@ -117,7 +117,7 @@ class modMenuwrenchHelper {
 
 		$level++;
 
-		if (isset($item->children) && $level <= $depth) {
+		if (isset($item->children) && $level <= $renderDepth) {
 
 			$output .= $containerOpenTag;
 
