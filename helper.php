@@ -79,13 +79,16 @@ class modMenuwrenchHelper {
 
 			// Hide selected items, promote children up one level
 			if (in_array($item->id, $hiddenItems)) {
-
-				foreach ($item->children as $child) {
-					$items[$item->parent]->children[$child->id] = $child;
+				if (isset($item->children)) {
+					foreach ($item->children as $child) {
+						$items[$item->parent]->children[$child->id] = $child;
+					}
 				}
 
-				//unset($item->children);
-				unset($items[$item->parent]->children[$item->id]);
+				// Remove from parent children array
+				if (isset($items[$item->parent]->children[$item->id])) {
+					unset($items[$item->parent]->children[$item->id]);
+				}
 			}
 
 			/**
