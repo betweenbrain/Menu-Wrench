@@ -48,12 +48,21 @@
 		</param>
 
 		<param name="showSubmenu"
-		       type="radio"
+		       type="list"
 		       default="1"
 		       label="MOD_MENU_WRENCH_SHOW_SUBMENU_ITEMS_LABEL"
 		       description="MOD_MENU_WRENCH_SHOW_SUBMENU_ITEMS_DESC">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
+			<option value="0">MOD_MENU_WRENCH_NO</option>
+			<option value="1">MOD_MENU_WRENCH_YES</option>
+		</param>
+
+		<param name="alphaSortSubmenu"
+		       type="list"
+		       default=""
+		       label="MOD_MENU_WRENCH_ALPHA_SORT_SUBMENU_LABEL"
+		       description="MOD_MENU_WRENCH_ALPHA_SORT_SUBMENU_DESC">
+			<option value="">MOD_MENU_WRENCH_NO</option>
+			<option value="1">MOD_MENU_WRENCH_YES</option>
 		</param>
 
 		<param name="hideSubmenu"

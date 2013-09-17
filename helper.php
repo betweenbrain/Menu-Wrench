@@ -114,11 +114,13 @@ class modMenuwrenchHelper {
 
 	public function render($item, $containerTag = '<ul>', $containerClass = 'menu', $itemTag = '<li>', $currentDepth = 0) {
 
-		$itemOpenTag       = str_replace('>', ' class="' . $item->class . '">', $itemTag);
-		$itemCloseTag      = str_replace('<', '</', $itemTag);
-		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
-		$renderDepth       = $this->params->get('renderDepth', 10);
+		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
+		$itemCloseTag      = str_replace('<', '</', $itemTag);
+		$itemOpenTag       = str_replace('>', ' class="' . $item->class . '">', $itemTag);
+
+		$alphaSortSubmenu = $this->params->get('alphaSortSubmenu', NULL);
+		$renderDepth      = $this->params->get('renderDepth', 10);
 
 		if ($item->type == 'separator') {
 			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
@@ -129,6 +131,12 @@ class modMenuwrenchHelper {
 		$currentDepth++;
 
 		if (isset($item->children) && $currentDepth <= $renderDepth) {
+
+			if ($alphaSortSubmenu) {
+				usort($item->children, function ($a, $b) {
+					return strcmp(strtolower($a->name), strtolower($b->name));
+				});
+			}
 
 			$output .= $containerOpenTag;
 
