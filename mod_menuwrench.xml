@@ -23,6 +23,7 @@
 	</languages>
 
 	<params addpath="/modules/mod_menuwrench/elements">
+
 		<param name="renderedItems"
 		       type="menuitems"
 		       label="MOD_MENU_WRENCH_RENDERED_ITEMS_LABEL"
@@ -65,5 +66,6 @@
 		       default=""
 		       label="Module Class Suffix"
 		       description="PARAMMODULECLASSSUFFIX"/>
+
 	</params>
 </install>
