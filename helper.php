@@ -33,10 +33,15 @@ class modMenuwrenchHelper {
 	 *
 	 */
 	function getBranches() {
+		$hiddenItems   = $this->params->get('hiddenItems', 0);
 		$hideSubmenu   = $this->params->get('hideSubmenu', 0);
 		$items         = $this->menu->_items;
 		$renderedItems = $this->params->get('renderedItems');
 		$showSubmenu   = $this->params->get('showSubmenu', 1);
+
+		if (!is_array($hiddenItems)) {
+			$hiddenItems = str_split($hiddenItems, strlen($hiddenItems));
+		}
 
 		if (!is_array($hideSubmenu)) {
 			$hideSubmenu = str_split($hideSubmenu, strlen($hideSubmenu));
@@ -70,6 +75,17 @@ class modMenuwrenchHelper {
 			// Remove non-selected menu item objects
 			if (!in_array($key, $renderedItems)) {
 				unset($items[$key]);
+			}
+
+			// Hide selected items, promote children up one level
+			if (in_array($item->id, $hiddenItems)) {
+
+				foreach ($item->children as $child) {
+					$items[$item->parent]->children[$child->id] = $child;
+				}
+
+				//unset($item->children);
+				unset($items[$item->parent]->children[$item->id]);
 			}
 
 			/**
