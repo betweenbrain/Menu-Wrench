@@ -76,7 +76,7 @@ class modMenuwrenchHelper {
 			$item->class = 'item' . $item->id . ' ' . $item->alias;
 
 			// Add parent class to all parents
-			if (isset($item->children)) {
+			if (isset($item->children) && !in_array($item->id, $hideSubmenu)) {
 				$item->class .= ' parent';
 			}
 
