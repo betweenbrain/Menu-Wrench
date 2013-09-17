@@ -33,8 +33,14 @@ class modMenuwrenchHelper {
 	 *
 	 */
 	function getBranches() {
-		$renderedItems = $this->params->get('renderedItems');
+		$hideSubmenu   = $this->params->get('hideSubmenu', 0);
 		$items         = $this->menu->_items;
+		$renderedItems = $this->params->get('renderedItems', 0);
+		$showSubmenu   = $this->params->get('showSubmenu', 1);
+
+		if (!is_array($hideSubmenu)) {
+			$hideSubmenu = str_split($hideSubmenu, strlen($hideSubmenu));
+		}
 
 		// Convert renderedItems to an array if only one item is selected
 		if (!is_array($renderedItems)) {
@@ -83,6 +89,11 @@ class modMenuwrenchHelper {
 			if (in_array($item->id, $this->active->tree)) {
 				$item->class .= ' active';
 			}
+
+			// Hide sub-menu items if parameter set to no and parent not active
+			if ((!in_array($item->id, $this->active->tree) && $showSubmenu == 0) || in_array($item->id, $hideSubmenu)) {
+				unset($item->children);
+			}
 		}
 
 		return $items;
@@ -91,10 +102,10 @@ class modMenuwrenchHelper {
 	/**
 	 * Renders the menu
 	 *
-	 * @param $item                 : the menu item
-	 * @param string $containerTag  : optional, declare a different container HTML element
-	 * @param string $containerClass: optional, declare a different container class
-	 * @param string $itemTag       : optional, declare a different menu item HTML element
+	 * @param $item                        : the menu item
+	 * @param string $containerTag         : optional, declare a different container HTML element
+	 * @param string $containerClass       : optional, declare a different container class
+	 * @param string $itemTag              : optional, declare a different menu item HTML element
 	 * @param int $currentDepth            : counter for level of depth that is rendering.
 	 * @return string
 	 *
