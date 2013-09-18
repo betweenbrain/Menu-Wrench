@@ -39,18 +39,9 @@ class modMenuwrenchHelper {
 		$renderedItems = $this->params->get('renderedItems');
 		$showSubmenu   = $this->params->get('showSubmenu', 1);
 
-		if (!is_array($hiddenItems)) {
-			$hiddenItems = str_split($hiddenItems, strlen($hiddenItems));
-		}
-
-		if (!is_array($hideSubmenu)) {
-			$hideSubmenu = str_split($hideSubmenu, strlen($hideSubmenu));
-		}
-
-		// Convert renderedItems to an array if only one item is selected
-		if (!is_array($renderedItems)) {
-			$renderedItems = str_split($renderedItems, strlen($renderedItems));
-		}
+		$hiddenItems   = $this->arrayCheck($hiddenItems);
+		$hideSubmenu   = $this->arrayCheck($hideSubmenu);
+		$renderedItems = $this->arrayCheck($renderedItems);
 
 		/**
 		 * Builds menu hierarchy by nesting children in parent object's 'children' property
@@ -114,6 +105,20 @@ class modMenuwrenchHelper {
 		$this->countChildren($items);
 
 		return $items;
+	}
+
+	/**
+	 * Checks if data is an array, converts it to one if not
+	 *
+	 * @param $data
+	 * @return array
+	 */
+	private function arrayCheck($data) {
+		if (!is_array($data)) {
+			$data = str_split($data, strlen($data));
+		}
+
+		return $data;
 	}
 
 	/**
