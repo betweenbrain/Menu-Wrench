@@ -79,9 +79,7 @@ class modMenuwrenchHelper {
 			if (in_array($item->id, $hiddenItems)) {
 
 				if (isset($item->children)) {
-					foreach ($item->children as $child) {
-						$items[$item->parent]->children[$child->id] = $child;
-					}
+					$this->recursiveSet($item->parent, $item->children, $items);
 				}
 
 				$this->recursiveUnset($item->id, $items);
@@ -119,8 +117,31 @@ class modMenuwrenchHelper {
 	}
 
 	/**
-	 * Recursively count children for later splitting
+	 * Recursively set menu orphaned items as child of unset parent
 	 *
+	 * @param $parentId
+	 * @param $children
+	 * @param $items
+	 * @internal param $key
+	 * @return mixed
+	 */
+
+	private function recursiveSet($parentId, $children, $items) {
+		foreach ($items as $item) {
+			if ($item->id == $parentId) {
+				foreach ($children as $child) {
+					$item->children[$child->id] = $child;
+				}
+			} elseif (isset($item->children)) {
+				$this->recursiveSet($parentId, $children, $item->children);
+			}
+		}
+	}
+
+	/**
+	 * Recursively unset menu elements in entire tree
+	 *
+	 * @param $key
 	 * @param $items
 	 * @return mixed
 	 */
