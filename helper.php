@@ -12,6 +12,13 @@
 class modMenuwrenchHelper {
 
 	/**
+	 * Flag to designate splitting of submenu sets
+	 *
+	 * @var null
+	 */
+	static $splitSubmenus = NULL;
+
+	/**
 	 * Constructor
 	 *
 	 * @param JRegistry $params: module parameters
@@ -227,7 +234,7 @@ class modMenuwrenchHelper {
 		if ($item->type == 'separator') {
 			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
 		} else {
-			$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
+			$output = $itemOpenTag . '<a ' . $browserNav . ' href=""/>' . $item->name . '</a>';
 		}
 
 		$currentDepth++;
@@ -240,13 +247,17 @@ class modMenuwrenchHelper {
 				});
 			}
 
-			$output .= $containerOpenTag;
-
 			if (isset($item->childrentotal) && $item->childrentotal >= $splitMinimum && $submenuSplit > 0) {
-				// Set split flag
 				$splitSubmenus = TRUE;
+			}
+
+			if (!$splitSubmenus) {
+				$output .= $containerOpenTag;
+			}
+
+			if ($splitSubmenus) {
 				// Split markup
-				$output .= $containerTag;
+				$output .= '<div class="split">' . $containerOpenTag;
 				// Calculate divisor based on this item's total children and parameter
 				$divisor = ceil($item->childrentotal / $submenuSplit);
 			}
@@ -257,7 +268,7 @@ class modMenuwrenchHelper {
 			foreach ($item->children as $item) {
 
 				if ($splitSubmenus && $index > 0 && fmod($index, $divisor) == 0) {
-					$output .= $containerCloseTag . $containerTag;
+					$output .= $containerCloseTag . $containerOpenTag;
 				}
 
 				$output .= $this->render($item, $containerTag, $containerClass, $itemTag, $currentDepth);
@@ -265,11 +276,8 @@ class modMenuwrenchHelper {
 				// Increment, rinse, repeat.
 				$index++;
 			}
-			$output .= $itemCloseTag;
 
-			if ($splitSubmenus) {
-				$output .= $containerCloseTag;
-			}
+			$output .= $itemCloseTag;
 
 			$output .= $containerCloseTag;
 		}
