@@ -14,7 +14,6 @@
 	<files>
 		<filename module="mod_menuwrench">mod_menuwrench.php</filename>
 		<filename>helper.php</filename>
-		<folder>elements</folder>
 		<folder>tmpl</folder>
 	</files>
 
