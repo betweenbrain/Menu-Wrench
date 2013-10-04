@@ -35,9 +35,9 @@ class modMenuwrenchHelper {
 	 *
 	 */
 	function getBranches() {
-		$renderedItems     = $this->params->get('renderedItems');
+		$renderedItems     = $this->params->get('renderedItems', 0);
 		$showSubmenu = $this->params->get('showSubmenu');
-		$hideSubmenu  = $this->params->get('hideSubmenu');
+		$hideSubmenu  = $this->params->get('hideSubmenu', 0);
 		// http://stackoverflow.com/questions/3787669/how-to-get-specific-menu-items-from-joomla/10218419#10218419
 		$items = $this->menu->getItems(NULL, NULL);
 
