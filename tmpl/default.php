@@ -9,7 +9,7 @@
  * License    GNU GPL v3 or later
  */
 ?>
-<ul class="menu">
+<ul class="menuwrench">
 	<?php foreach ($items as $item) {
 		echo $helper->render($item, '<ul>', 'menu', '<li>');
 	}

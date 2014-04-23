@@ -12,6 +12,13 @@
 class modMenuwrenchHelper {
 
 	/**
+	 * Flag to designate splitting of submenu sets
+	 *
+	 * @var null
+	 */
+	static $splitSubmenus = NULL;
+
+	/**
 	 * Constructor
 	 *
 	 * @param JRegistry $params: module parameters
@@ -39,18 +46,9 @@ class modMenuwrenchHelper {
 		$renderedItems = $this->params->get('renderedItems');
 		$showSubmenu   = $this->params->get('showSubmenu', 1);
 
-		if (!is_array($hiddenItems)) {
-			$hiddenItems = str_split($hiddenItems, strlen($hiddenItems));
-		}
-
-		if (!is_array($hideSubmenu)) {
-			$hideSubmenu = str_split($hideSubmenu, strlen($hideSubmenu));
-		}
-
-		// Convert renderedItems to an array if only one item is selected
-		if (!is_array($renderedItems)) {
-			$renderedItems = str_split($renderedItems, strlen($renderedItems));
-		}
+		$hiddenItems   = $this->arrayCheck($hiddenItems);
+		$hideSubmenu   = $this->arrayCheck($hideSubmenu);
+		$renderedItems = $this->arrayCheck($renderedItems);
 
 		/**
 		 * Builds menu hierarchy by nesting children in parent object's 'children' property
@@ -79,9 +77,7 @@ class modMenuwrenchHelper {
 			if (in_array($item->id, $hiddenItems)) {
 
 				if (isset($item->children)) {
-					foreach ($item->children as $child) {
-						$items[$item->parent]->children[$child->id] = $child;
-					}
+					$this->recursiveSet($item->parent, $item->children, $items);
 				}
 
 				$this->recursiveUnset($item->id, $items);
@@ -119,8 +115,45 @@ class modMenuwrenchHelper {
 	}
 
 	/**
-	 * Recursively count children for later splitting
+	 * Checks if data is an array, converts it to one if not
 	 *
+	 * @param $data
+	 * @return array
+	 */
+	private function arrayCheck($data) {
+		if (!is_array($data)) {
+			$data = str_split($data, strlen($data));
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Recursively set menu orphaned items as child of unset parent
+	 *
+	 * @param $parentId
+	 * @param $children
+	 * @param $items
+	 * @internal param $key
+	 * @return mixed
+	 */
+
+	private function recursiveSet($parentId, $children, $items) {
+		foreach ($items as $item) {
+			if ($item->id == $parentId) {
+				foreach ($children as $child) {
+					$item->children[$child->id] = $child;
+				}
+			} elseif (isset($item->children)) {
+				$this->recursiveSet($parentId, $children, $item->children);
+			}
+		}
+	}
+
+	/**
+	 * Recursively unset menu elements in entire tree
+	 *
+	 * @param $key
 	 * @param $items
 	 * @return mixed
 	 */
@@ -185,30 +218,23 @@ class modMenuwrenchHelper {
 		$splitMinimum     = $this->params->get('splitMinimum', 10);
 		$submenuSplit     = $this->params->get('submenuSplit', 0);
 
-		switch ($item->type)
-		{
-			case('separator'):
-				$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
-				break;
-
-			case('menulink'):
-				$output = $itemOpenTag . '<a href="' . JRoute::_($item->link) . '"/>' . $item->name . '</a>';
-				break;
-
-			case 'url' :
-				if ((strpos($item->link, 'index.php?') === 0) && (strpos($item->link, 'Itemid=') === false))
-				{
-					$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
-				}
-				else
-				{
-					$output = $itemOpenTag . '<a href="' . $item->link . '"/>' . $item->name . '</a>';
-				}
-				break;
-
+		switch ($item->browserNav) :
 			default:
-				$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
+			case 0:
+				$browserNav = '';
 				break;
+			case 1:
+				$browserNav = 'target="_blank"';
+				break;
+			case 2:
+				$browserNav = "onclick=\"window.open(this.href,'targetWindow','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,'" . $this->params->get('window_open') . ");return false;\"";
+				break;
+		endswitch;
+
+		if ($item->type == 'separator') {
+			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
+		} else {
+			$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
 		}
 
 		$currentDepth++;
@@ -221,13 +247,17 @@ class modMenuwrenchHelper {
 				});
 			}
 
-			$output .= $containerOpenTag;
-
 			if (isset($item->childrentotal) && $item->childrentotal >= $splitMinimum && $submenuSplit > 0) {
-				// Set split flag
 				$splitSubmenus = TRUE;
+			}
+
+			if (!$splitSubmenus) {
+				$output .= $containerOpenTag;
+			}
+
+			if ($splitSubmenus) {
 				// Split markup
-				$output .= $containerTag;
+				$output .= '<div class="split">' . $containerOpenTag;
 				// Calculate divisor based on this item's total children and parameter
 				$divisor = ceil($item->childrentotal / $submenuSplit);
 			}
@@ -238,7 +268,7 @@ class modMenuwrenchHelper {
 			foreach ($item->children as $item) {
 
 				if ($splitSubmenus && $index > 0 && fmod($index, $divisor) == 0) {
-					$output .= $containerCloseTag . $containerTag;
+					$output .= $containerCloseTag . $containerOpenTag;
 				}
 
 				$output .= $this->render($item, $containerTag, $containerClass, $itemTag, $currentDepth);
@@ -246,11 +276,8 @@ class modMenuwrenchHelper {
 				// Increment, rinse, repeat.
 				$index++;
 			}
-			$output .= $itemCloseTag;
 
-			if ($splitSubmenus) {
-				$output .= $containerCloseTag;
-			}
+			$output .= $itemCloseTag;
 
 			$output .= $containerCloseTag;
 		}
