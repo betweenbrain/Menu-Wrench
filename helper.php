@@ -185,10 +185,30 @@ class modMenuwrenchHelper {
 		$splitMinimum     = $this->params->get('splitMinimum', 10);
 		$submenuSplit     = $this->params->get('submenuSplit', 0);
 
-		if ($item->type == 'separator') {
-			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
-		} else {
-			$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
+		switch ($item->type)
+		{
+			case('separator'):
+				$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
+				break;
+
+			case('menulink'):
+				$output = $itemOpenTag . '<a href="' . JRoute::_($item->link) . '"/>' . $item->name . '</a>';
+				break;
+
+			case 'url' :
+				if ((strpos($item->link, 'index.php?') === 0) && (strpos($item->link, 'Itemid=') === false))
+				{
+					$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
+				}
+				else
+				{
+					$output = $itemOpenTag . '<a href="' . $item->link . '"/>' . $item->name . '</a>';
+				}
+				break;
+
+			default:
+				$output = $itemOpenTag . '<a href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->name . '</a>';
+				break;
 		}
 
 		$currentDepth++;
