@@ -154,13 +154,30 @@ class modMenuwrenchHelper
 				break;
 		endswitch;
 
-		if ($item->type == 'separator')
+		switch ($item->type)
 		{
-			$output = $itemOpenTag . '<span class="separator">' . $item->name . '</span>';
-		}
-		else
-		{
-			$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->title . '</a>';
+			case 'alias':
+				$output = $itemOpenTag . '<a ' . $browserNav . ' href="index.php?Itemid=' . $item->params->get('aliasoptions') . '"/>' . $item->title . '</a>';
+				break;
+
+			case 'separator':
+				$output = $itemOpenTag . '<span class="separator">' . $item->title . '</span>';
+				break;
+
+			case 'url' :
+				if ((strpos($item->link, 'index.php?') === 0) && (strpos($item->link, 'Itemid=') === false))
+				{
+					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->title . '</a>';
+				}
+				else
+				{
+					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . $item->link . '"/>' . $item->title . '</a>';
+				}
+				break;
+
+			default:
+				$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->title . '</a>';
+				break;
 		}
 
 		$level++;
