@@ -39,9 +39,9 @@ class modMenuwrenchHelper
 	 */
 	function getBranches()
 	{
-		$renderedItems = $this->params->get('renderedItems');
-		$showSubmenu   = $this->params->get('showSubmenu');
-		$hideSubmenu   = $this->params->get('hideSubmenu');
+		$renderedItems = $this->params->get('renderedItems', 0);
+		$showSubmenu   = $this->params->get('showSubmenu', 1);
+		$hideSubmenu   = $this->params->get('hideSubmenu', 0);
 		// http://stackoverflow.com/questions/3787669/how-to-get-specific-menu-items-from-joomla/10218419#10218419
 		$items = $this->menu->getItems(null, null);
 
@@ -139,7 +139,7 @@ class modMenuwrenchHelper
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
-		$renderDepth       = htmlspecialchars($this->params->get('renderDepth'));
+		$renderDepth       = htmlspecialchars($this->params->get('renderDepth', 10));
 
 		switch ($item->browserNav) :
 			default:
