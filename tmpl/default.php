@@ -5,8 +5,8 @@
  * Created    8/6/13 2:34 PM
  * Author     Matt Thomas | matt@betweenbrain.com | http://betweenbrain.com
  * Support    https://github.com/betweenbrain/Menu-Wrench/issues
- * Copyright  Copyright (C) 2013 betweenbrain llc. All Rights Reserved.
- * License    GNU GPL v3 or later
+ * Copyright  Copyright (C) 2013-2014 betweenbrain llc. All Rights Reserved.
+ * License    GNU GPL v2 or later
  */
 ?>
 <ul class="menu">
