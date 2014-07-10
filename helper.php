@@ -25,6 +25,7 @@ class modMenuwrenchHelper
 	public function __construct($params)
 	{
 		$this->app    = JFactory::getApplication();
+		$this->db     = JFactory::getDbo();
 		$this->menu   = $this->app->getMenu();
 		$this->active = $this->menu->getActive();
 		$this->params = $params;
@@ -64,6 +65,16 @@ class modMenuwrenchHelper
 		{
 
 			$items[$item->id] = $item;
+
+			// If menu item is a category, add all articles as menu items
+			if ($item->query['view'] === 'category')
+			{
+				$items[$item->id]->children = $this->linkCategoryItems(
+					$this->getCategoryItems($item->query['id']),
+					$item->query['id'],
+					$item->id
+				);
+			}
 
 			unset($items[$key]);
 
@@ -116,6 +127,52 @@ class modMenuwrenchHelper
 		}
 
 		return $items;
+	}
+
+	/**
+	 * Get all of the published articles in a given category
+	 *
+	 * @param $categoryId
+	 *
+	 * @return mixed
+	 */
+	private function getCategoryItems($categoryId)
+	{
+
+		$query = $this->db->getQuery(true);
+
+		$query
+			->select($this->db->quoteName(array('id', 'alias', 'title')))
+			->from($this->db->quoteName('#__content'))
+			->where($this->db->quoteName('state') . ' = ' . $this->db->quote('1'), ' AND ')
+			->where($this->db->quoteName('catid') . ' = ' . $this->db->quote($categoryId))
+			->order('ordering ASC');
+
+		// Reset the query using our newly populated query object.
+		$this->db->setQuery($query);
+
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		return $this->db->loadObjectList();
+	}
+
+	/**
+	 * Generate single article item link, based on supplied parameters
+	 *
+	 * @param $items
+	 * @param $catId
+	 * @param $itemId
+	 *
+	 * @return mixed
+	 */
+	private function linkCategoryItems($items, $catId, $itemId)
+	{
+		foreach ($items as $item)
+		{
+			$item->link = 'index.php?option=com_content&view=article&id=' . $item->id . ':' . $item->alias . '&catid=' . $catId . '&Itemid=' . $itemId;
+		}
+
+		return $items;
+
 	}
 
 	/**
@@ -176,7 +233,8 @@ class modMenuwrenchHelper
 				break;
 
 			default:
-				$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->title . '</a>';
+				$item->link = strpos($item->link, 'Itemid') ? $item->link : $item->link . '&Itemid=' . $item->id;
+				$output     = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link) . '"/>' . $item->title . '</a>';
 				break;
 		}
 
