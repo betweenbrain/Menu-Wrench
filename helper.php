@@ -67,7 +67,7 @@ class modMenuwrenchHelper
 			$items[$item->id] = $item;
 
 			// If menu item is a category, add all articles as menu items
-			if ($item->query['view'] === 'category')
+			if (array_key_exists('view', $item->query) && $item->query['view'] === 'category')
 			{
 				$items[$item->id]->children = $this->linkCategoryItems(
 					$this->getCategoryItems($item->query['id']),
