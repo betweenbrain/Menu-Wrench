@@ -191,6 +191,10 @@ class modMenuwrenchHelper
 
 	public function render($item, $containerTag = '<ul>', $containerClass = 'menu', $itemTag = '<li>', $level = 0)
 	{
+		// Force object property creation as they don't exist for category blog items
+		$item->browserNav = isset($item->browserNav) ? $item->browserNav : '';
+		$item->class      = isset($item->class) ? $item->class : '';
+		$item->type       = isset($item->type) ? $item->type : '';
 
 		$itemOpenTag       = str_replace('>', ' class="' . $item->class . '">', $itemTag);
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
