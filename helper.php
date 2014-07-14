@@ -113,6 +113,12 @@ class modMenuwrenchHelper
 			{
 				unset($item->children);
 			}
+
+			// Add image to item object if one is defined in the menu item's parameters
+			if ($item->params->get('menu_image', ''))
+			{
+				$item->menu_image = htmlspecialchars($item->params->get('menu_image', ''), ENT_COMPAT, 'UTF-8', false);
+			}
 		}
 
 		return $items;
@@ -153,6 +159,14 @@ class modMenuwrenchHelper
 				$browserNav = "onclick=\"window.open(this.href,'targetWindow','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,'" . $this->params->get('window_open') . ");return false;\"";
 				break;
 		endswitch;
+
+		// Render item title with image if it is set
+		if ($item->menu_image)
+		{
+			$item->params->get('menu_text', 1) ?
+				$item->title = '<img src="' . $item->menu_image . '" alt="' . $item->title . '" /><span class="image-title">' . $item->title . '</span> ' :
+				$item->title = '<img src="' . $item->menu_image . '" alt="' . $item->title . '" />';
+		}
 
 		switch ($item->type)
 		{
