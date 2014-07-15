@@ -40,10 +40,10 @@ class modMenuwrenchHelper
 	 */
 	function getBranches()
 	{
-		$renderedItems = $this->params->get('renderedItems', 0);
+		$renderedItems     = $this->params->get('renderedItems', 0);
 		$showCategoryItems = $this->params->get('showCategoryItems', 0);
-		$showSubmenu   = $this->params->get('showSubmenu', 1);
-		$hideSubmenu   = $this->params->get('hideSubmenu', 0);
+		$showSubmenu       = $this->params->get('showSubmenu', 1);
+		$hideSubmenu       = $this->params->get('hideSubmenu', 0);
 		// http://stackoverflow.com/questions/3787669/how-to-get-specific-menu-items-from-joomla/10218419#10218419
 		$items = $this->menu->getItems(null, null);
 
@@ -201,6 +201,7 @@ class modMenuwrenchHelper
 		// Force object property creation as they don't exist for category blog items
 		$item->browserNav = isset($item->browserNav) ? $item->browserNav : '';
 		$item->class      = isset($item->class) ? $item->class : '';
+		$item->menu_image = isset($item->menu_image) ? $item->menu_image : '';
 		$item->type       = isset($item->type) ? $item->type : '';
 
 		$itemOpenTag       = str_replace('>', ' class="' . $item->class . '">', $itemTag);
