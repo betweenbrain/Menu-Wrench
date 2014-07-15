@@ -41,6 +41,7 @@ class modMenuwrenchHelper
 	function getBranches()
 	{
 		$renderedItems = $this->params->get('renderedItems', 0);
+		$showCategoryItems = $this->params->get('showCategoryItems', 0);
 		$showSubmenu   = $this->params->get('showSubmenu', 1);
 		$hideSubmenu   = $this->params->get('hideSubmenu', 0);
 		// http://stackoverflow.com/questions/3787669/how-to-get-specific-menu-items-from-joomla/10218419#10218419
@@ -67,7 +68,7 @@ class modMenuwrenchHelper
 			$items[$item->id] = $item;
 
 			// If menu item is a category, add all articles as menu items
-			if (array_key_exists('view', $item->query) && $item->query['view'] === 'category')
+			if ($showCategoryItems && array_key_exists('view', $item->query) && $item->query['view'] === 'category')
 			{
 				$items[$item->id]->children = $this->linkCategoryItems(
 					$this->getCategoryItems($item->query['id']),
