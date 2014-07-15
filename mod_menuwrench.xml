@@ -62,6 +62,15 @@
 					<option value="1">JYES</option>
 				</field>
 
+				<field name="showCategoryItems"
+				       type="radio"
+				       default="0"
+				       label="MOD_MENU_WRENCH_SHOW_CATEGORY_ITEMS_LABEL"
+				       description="MOD_MENU_WRENCH_SHOW_CATEGORY_ITEMS_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
 				<field name="hideSubmenu"
 				       type="menuitem"
 				       multiple="true"

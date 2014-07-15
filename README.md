@@ -11,6 +11,17 @@ Pick and choose any menu item, from any Joomla menu, at any level, and render al
 
 ![Rendered as one menu](https://raw.github.com/betweenbrain/Image-Attachments/master/three-items-three-menus-result.png "Rendered as one menu")
 
+**Turns This:**
+
+![Multiple levels of the same menu](https://raw.github.com/betweenbrain/Image-Attachments/master/menu-wrench-multi-level.png "Multiple levels of the same menu")
+
+**Into this:**
+
+![Multiple levels of the same menu](https://raw.github.com/betweenbrain/Image-Attachments/master/menu-wrench-multi-level-result.png "Multiple levels of the same menu")
+
+By selecting to render parent and child menu items, but not chldren of the parents selected.
+
+
 ## Features ##
 - Supports view access parameter (ACL)
 - Supports menu item manager ordering
@@ -52,6 +63,9 @@ Core Menu Module
 ## Known Issues ##
 - Link Type Options (Joomla 2.5): Not supported.
 
+Status
+====================
+While Menu Wrench is being used in production, on a limited basis, it's status is still considered beta as backwards incompatible changes may take place.
 
 Stable Master Branch Policy
 ====================
