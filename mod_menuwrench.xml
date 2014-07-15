@@ -3,12 +3,12 @@
            version="2.5"
            method="upgrade">
 	<name>Menu Wrench</name>
-	<creationDate>May 20, 2014</creationDate>
+	<creationDate>July 15, 2014</creationDate>
 	<author>Matt Thomas</author>
 	<authorUrl>http://betweenbrain.com</authorUrl>
 	<copyright>Copyright (C) 2013-2014 betweenbrain llc. All rights reserved.</copyright>
 	<license>GNU General Public License version 2, or later.</license>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<description>MOD_MENU_WRENCH_DESC</description>
 
 	<files>
