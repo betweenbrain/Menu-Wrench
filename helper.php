@@ -68,7 +68,7 @@ class modMenuwrenchHelper
 			$items[$item->id] = $item;
 
 			// If menu item is a category, add all articles as menu items
-			if ($showCategoryItems && array_key_exists('view', $item->query) && $item->query['view'] === 'category')
+			if ($showCategoryItems && $this->isContent($item))
 			{
 				$items[$item->id]->children = $this->linkCategoryItems(
 					$this->getCategoryItems($item->query['id']),
@@ -160,6 +160,23 @@ class modMenuwrenchHelper
 
 		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
 		return $this->db->loadObjectList();
+	}
+
+	/**
+	 * Check if a menu item is com_content and a category type
+	 *
+	 * @param $item
+	 *
+	 * @return bool
+	 */
+	private function isContent($item)
+	{
+		if (array_key_exists('view', $item->query) && $item->query['option'] === 'com_content' && $item->query['view'] === 'category')
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
