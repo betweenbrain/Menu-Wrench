@@ -159,7 +159,7 @@ class modMenuwrenchHelper
 		$this->db->setQuery($query);
 
 		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
-		return $this->db->loadObjectList();
+		return $this->setNullProperties($this->db->loadObjectList());
 	}
 
 	/**
@@ -215,38 +215,48 @@ class modMenuwrenchHelper
 
 	public function render($item, $containerTag = '<ul>', $containerClass = 'menu', $itemTag = '<li>', $level = 0)
 	{
-		// Force object property creation as they don't exist for category blog items
-		$item->browserNav = isset($item->browserNav) ? $item->browserNav : '';
-		$item->class      = isset($item->class) ? $item->class : '';
-		$item->menu_image = isset($item->menu_image) ? $item->menu_image : '';
-		$item->type       = isset($item->type) ? $item->type : '';
-
 		$itemOpenTag       = str_replace('>', ' class="' . $item->class . '">', $itemTag);
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
 		$renderDepth       = htmlspecialchars($this->params->get('renderDepth', 10));
 
-		switch ($item->browserNav) :
-			default:
-			case 0:
-				$browserNav = '';
-				break;
-			case 1:
-				$browserNav = 'target="_blank"';
-				break;
-			case 2:
-				$browserNav = "onclick=\"window.open(this.href,'targetWindow','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,'" . $this->params->get('window_open') . ");return false;\"";
-				break;
-		endswitch;
+		$output = $this->startOutput($item, $itemOpenTag);
 
-		// Render item title with image if it is set
-		if ($item->menu_image)
+		$level++;
+
+		if (isset($item->children) && $level <= $renderDepth)
 		{
-			$item->params->get('menu_text', 1) ?
-				$item->title = '<img src="' . $item->menu_image . '" alt="' . $item->title . '" /><span class="image-title">' . $item->title . '</span> ' :
-				$item->title = '<img src="' . $item->menu_image . '" alt="' . $item->title . '" />';
+
+			$output .= $containerOpenTag;
+
+			foreach ($item->children as $item)
+			{
+
+				$output .= $this->render($item, $containerTag, $containerClass, $itemTag, $level);
+			}
+			$output .= $itemCloseTag;
+			$output .= $containerCloseTag;
 		}
+
+		$output .= $itemCloseTag;
+
+		return $output;
+	}
+
+	/**
+	 * Starts rendering of the item output
+	 *
+	 * @param $item
+	 * @param $itemOpenTag
+	 *
+	 * @return string
+	 */
+	private function startOutput($item, $itemOpenTag)
+	{
+
+		$browserNav  = property_exists($item, 'browserNav') ? $this->setBrowsernav($item) : '';
+		$item->title = property_exists($item, 'menu_image') ? $this->setTitle($item) : $item->title;
 
 		switch ($item->type)
 		{
@@ -275,24 +285,69 @@ class modMenuwrenchHelper
 				break;
 		}
 
-		$level++;
-
-		if (isset($item->children) && $level <= $renderDepth)
-		{
-
-			$output .= $containerOpenTag;
-
-			foreach ($item->children as $item)
-			{
-
-				$output .= $this->render($item, $containerTag, $containerClass, $itemTag, $level);
-			}
-			$output .= $itemCloseTag;
-			$output .= $containerCloseTag;
-		}
-
-		$output .= $itemCloseTag;
-
 		return $output;
 	}
+
+	/**
+	 * Conditionally sets the item's browsernav property
+	 *
+	 * @param $item
+	 *
+	 * @return string
+	 */
+	private function setBrowsernav($item)
+	{
+		switch ($item->browserNav) :
+			default:
+			case 0:
+				$browserNav = '';
+				break;
+			case 1:
+				$browserNav = 'target="_blank"';
+				break;
+			case 2:
+				$browserNav = "onclick=\"window.open(this.href,'targetWindow','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,'" . $this->params->get('window_open') . ");return false;\"";
+				break;
+		endswitch;
+
+		return $browserNav;
+	}
+
+	/**
+	 * Sets null properties if they don't exist
+	 *
+	 * @param $items
+	 *
+	 * @return mixed
+	 */
+	private function setNullProperties($items)
+	{
+		foreach ($items as $item)
+		{
+			$item->class = property_exists($item, 'class') ? $this->class : '';
+			$item->type  = property_exists($item, 'type') ? $this->type : '';
+		}
+
+		return $items;
+	}
+
+	/**
+	 * Render item title with image if it is set
+	 *
+	 * @param $item
+	 *
+	 * @return string
+	 */
+	private function setTitle($item)
+	{
+		if ($item->menu_image)
+		{
+			$item->params->get('menu_text', 1) ?
+				$item->title = '<img src="' . $item->menu_image . '" alt="' . $item->title . '" /><span class="image-title">' . $item->title . '</span> ' :
+				$item->title = '<img src="' . $item->menu_image . '" alt="' . $item->title . '" />';
+		}
+
+		return $item->title;
+	}
+
 }
