@@ -97,29 +97,6 @@ class modMenuwrenchHelper
 				unset($items[$key]);
 			}
 
-			/**
-			 * Builds object classes
-			 */
-			$item->class = 'item' . $item->id . ' ' . $item->alias;
-
-			// Add parent class to all parents
-			if (isset($item->children))
-			{
-				$item->class .= ' parent';
-			}
-
-			// Add current class to specific item
-			if ($item->id == $this->active->id)
-			{
-				$item->class .= ' current';
-			}
-
-			// Add active class to all items in active branch
-			if (in_array($item->id, $this->active->tree))
-			{
-				$item->class .= ' active';
-			}
-
 			// Hide sub-menu items if parameter set to no and parent not active
 			if ((!in_array($item->id, $this->active->tree) && $showSubmenu == 0) || in_array($item->id, $hideSubmenu))
 			{
@@ -160,6 +137,34 @@ class modMenuwrenchHelper
 
 		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
 		return $this->setNullProperties($this->db->loadObjectList());
+	}
+
+	private function getClasses($item)
+	{
+		/**
+		 * Builds object classes
+		 */
+		$classes = 'item' . $item->id . ' ' . $item->alias;
+
+		// Add parent class to all parents
+		if (isset($item->children))
+		{
+			$classes .= ' parent';
+		}
+
+		// Add current class to specific item
+		if ($item->id == $this->active->id)
+		{
+			$classes .= ' current';
+		}
+
+		// Add active class to all items in active branch
+		if (in_array($item->id, $this->active->tree))
+		{
+			$classes .= ' active';
+		}
+
+		return $classes;
 	}
 
 	/**
@@ -215,7 +220,7 @@ class modMenuwrenchHelper
 
 	public function render($item, $containerTag = '<ul>', $containerClass = 'menu', $itemTag = '<li>', $level = 0)
 	{
-		$itemOpenTag       = str_replace('>', ' class="' . $item->class . '">', $itemTag);
+		$itemOpenTag       = str_replace('>', ' class="' . $this->getClasses($item) . '">', $itemTag);
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
@@ -324,8 +329,7 @@ class modMenuwrenchHelper
 	{
 		foreach ($items as $item)
 		{
-			$item->class = property_exists($item, 'class') ? $this->class : '';
-			$item->type  = property_exists($item, 'type') ? $this->type : '';
+			$item->type = property_exists($item, 'type') ? $this->type : '';
 		}
 
 		return $items;
