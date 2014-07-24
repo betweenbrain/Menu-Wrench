@@ -153,7 +153,7 @@ class modMenuwrenchHelper
 		}
 
 		// Add current class to specific item
-		if ($item->id == $this->active->id)
+		if ($this->isActive($item))
 		{
 			$classes .= ' current';
 		}
@@ -165,6 +165,62 @@ class modMenuwrenchHelper
 		}
 
 		return $classes;
+	}
+
+	/**
+	 * Checks if the current item is active. Category items that are dynamically
+	 * rendered as menu items will have the same Itemid and thus falsely match active->id
+	 *
+	 * @param $item
+	 *
+	 * @return bool
+	 */
+	private function isActive($item)
+	{
+		if ($item->id == $this->active->id && !$this->isActiveChild($item))
+		{
+			return true;
+		}
+		elseif ($this->isActiveArticle($item))
+		{
+			return true;
+		}
+	}
+
+	/**
+	 * Checks if the current item has any active children
+	 *
+	 * @param $item
+	 *
+	 * @return bool
+	 */
+	private function isActiveChild($item)
+	{
+		if (property_exists($item, 'children'))
+		{
+			foreach ($item->children as $child)
+			{
+				if ($this->isActiveArticle($child))
+				{
+					return true;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Checks if the item is an article and active
+	 *
+	 * @param $item
+	 *
+	 * @return bool
+	 */
+	private function isActiveArticle($item)
+	{
+		if ($this->app->input->get('view') == 'article' && $item->id == $this->app->input->get('id', '', 'INT'))
+		{
+			return true;
+		}
 	}
 
 	/**
