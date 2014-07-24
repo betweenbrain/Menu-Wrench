@@ -25,6 +25,7 @@ class modMenuwrenchHelper
 	public function __construct($params)
 	{
 		$this->app    = JFactory::getApplication();
+		$this->db     = JFactory::getDbo();
 		$this->menu   = $this->app->getMenu();
 		$this->active = $this->menu->getActive();
 		$this->params = $params;
@@ -39,9 +40,10 @@ class modMenuwrenchHelper
 	 */
 	function getBranches()
 	{
-		$renderedItems = $this->params->get('renderedItems', 0);
-		$showSubmenu   = $this->params->get('showSubmenu', 1);
-		$hideSubmenu   = $this->params->get('hideSubmenu', 0);
+		$renderedItems     = $this->params->get('renderedItems', 0);
+		$showCategoryItems = $this->params->get('showCategoryItems', 0);
+		$showSubmenu       = $this->params->get('showSubmenu', 1);
+		$hideSubmenu       = $this->params->get('hideSubmenu', 0);
 		// http://stackoverflow.com/questions/3787669/how-to-get-specific-menu-items-from-joomla/10218419#10218419
 		$items = $this->menu->getItems(null, null);
 
@@ -65,6 +67,16 @@ class modMenuwrenchHelper
 
 			$items[$item->id] = $item;
 
+			// If menu item is a category, add all articles as menu items
+			if ($showCategoryItems && $this->isContent($item))
+			{
+				$items[$item->id]->children = $this->linkCategoryItems(
+					$this->getCategoryItems($item->query['id']),
+					$item->query['id'],
+					$item->id
+				);
+			}
+
 			unset($items[$key]);
 
 			if ($item->parent_id != 1)
@@ -85,37 +97,167 @@ class modMenuwrenchHelper
 				unset($items[$key]);
 			}
 
-			/**
-			 * Builds object classes
-			 */
-			$item->class = 'item' . $item->id . ' ' . $item->alias;
-
-			// Add parent class to all parents
-			if (isset($item->children))
-			{
-				$item->class .= ' parent';
-			}
-
-			// Add current class to specific item
-			if ($item->id == $this->active->id)
-			{
-				$item->class .= ' current';
-			}
-
-			// Add active class to all items in active branch
-			if (in_array($item->id, $this->active->tree))
-			{
-				$item->class .= ' active';
-			}
-
 			// Hide sub-menu items if parameter set to no and parent not active
 			if ((!in_array($item->id, $this->active->tree) && $showSubmenu == 0) || in_array($item->id, $hideSubmenu))
 			{
 				unset($item->children);
 			}
+
+			// Add image to item object if one is defined in the menu item's parameters
+			if ($item->params->get('menu_image', ''))
+			{
+				$item->menu_image = htmlspecialchars($item->params->get('menu_image', ''), ENT_COMPAT, 'UTF-8', false);
+			}
 		}
 
 		return $items;
+	}
+
+	/**
+	 * Get all of the published articles in a given category
+	 *
+	 * @param $categoryId
+	 *
+	 * @return mixed
+	 */
+	private function getCategoryItems($categoryId)
+	{
+
+		$query = $this->db->getQuery(true);
+
+		$query
+			->select($this->db->quoteName(array('id', 'alias', 'title')))
+			->from($this->db->quoteName('#__content'))
+			->where($this->db->quoteName('state') . ' = ' . $this->db->quote('1'), ' AND ')
+			->where($this->db->quoteName('catid') . ' = ' . $this->db->quote($categoryId))
+			->order('ordering ASC');
+
+		// Reset the query using our newly populated query object.
+		$this->db->setQuery($query);
+
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		return $this->setNullProperties($this->db->loadObjectList());
+	}
+
+	private function getClasses($item)
+	{
+		/**
+		 * Builds object classes
+		 */
+		$classes = 'item' . $item->id . ' ' . $item->alias;
+
+		// Add parent class to all parents
+		if (isset($item->children))
+		{
+			$classes .= ' parent';
+		}
+
+		// Add current class to specific item
+		if ($this->isActive($item))
+		{
+			$classes .= ' current';
+		}
+
+		// Add active class to all items in active branch
+		if (in_array($item->id, $this->active->tree))
+		{
+			$classes .= ' active';
+		}
+
+		return $classes;
+	}
+
+	/**
+	 * Checks if the current item is active. Category items that are dynamically
+	 * rendered as menu items will have the same Itemid and thus falsely match active->id
+	 *
+	 * @param $item
+	 *
+	 * @return bool
+	 */
+	private function isActive($item)
+	{
+		if ($item->id == $this->active->id && !$this->isActiveChild($item))
+		{
+			return true;
+		}
+		elseif ($this->isActiveArticle($item))
+		{
+			return true;
+		}
+	}
+
+	/**
+	 * Checks if the current item has any active children
+	 *
+	 * @param $item
+	 *
+	 * @return bool
+	 */
+	private function isActiveChild($item)
+	{
+		if (property_exists($item, 'children'))
+		{
+			foreach ($item->children as $child)
+			{
+				if ($this->isActiveArticle($child))
+				{
+					return true;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Checks if the item is an article and active
+	 *
+	 * @param $item
+	 *
+	 * @return bool
+	 */
+	private function isActiveArticle($item)
+	{
+		if ($this->app->input->get('view') == 'article' && $item->id == $this->app->input->get('id', '', 'INT'))
+		{
+			return true;
+		}
+	}
+
+	/**
+	 * Check if a menu item is com_content and a category type
+	 *
+	 * @param $item
+	 *
+	 * @return bool
+	 */
+	private function isContent($item)
+	{
+		if (array_key_exists('view', $item->query) && $item->query['option'] === 'com_content' && $item->query['view'] === 'category')
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Generate single article item link, based on supplied parameters
+	 *
+	 * @param $items
+	 * @param $catId
+	 * @param $itemId
+	 *
+	 * @return mixed
+	 */
+	private function linkCategoryItems($items, $catId, $itemId)
+	{
+		foreach ($items as $item)
+		{
+			$item->link = 'index.php?option=com_content&view=article&id=' . $item->id . ':' . $item->alias . '&catid=' . $catId . '&Itemid=' . $itemId;
+		}
+
+		return $items;
+
 	}
 
 	/**
@@ -134,25 +276,48 @@ class modMenuwrenchHelper
 
 	public function render($item, $containerTag = '<ul>', $containerClass = 'menu', $itemTag = '<li>', $level = 0)
 	{
-
-		$itemOpenTag       = str_replace('>', ' class="' . $item->class . '">', $itemTag);
+		$itemOpenTag       = str_replace('>', ' class="' . $this->getClasses($item) . '">', $itemTag);
 		$itemCloseTag      = str_replace('<', '</', $itemTag);
 		$containerOpenTag  = str_replace('>', ' class="' . $containerClass . '">', $containerTag);
 		$containerCloseTag = str_replace('<', '</', $containerTag);
 		$renderDepth       = htmlspecialchars($this->params->get('renderDepth', 10));
 
-		switch ($item->browserNav) :
-			default:
-			case 0:
-				$browserNav = '';
-				break;
-			case 1:
-				$browserNav = 'target="_blank"';
-				break;
-			case 2:
-				$browserNav = "onclick=\"window.open(this.href,'targetWindow','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,'" . $this->params->get('window_open') . ");return false;\"";
-				break;
-		endswitch;
+		$output = $this->startOutput($item, $itemOpenTag);
+
+		$level++;
+
+		if (isset($item->children) && $level <= $renderDepth)
+		{
+
+			$output .= $containerOpenTag;
+
+			foreach ($item->children as $item)
+			{
+
+				$output .= $this->render($item, $containerTag, $containerClass, $itemTag, $level);
+			}
+			$output .= $itemCloseTag;
+			$output .= $containerCloseTag;
+		}
+
+		$output .= $itemCloseTag;
+
+		return $output;
+	}
+
+	/**
+	 * Starts rendering of the item output
+	 *
+	 * @param $item
+	 * @param $itemOpenTag
+	 *
+	 * @return string
+	 */
+	private function startOutput($item, $itemOpenTag)
+	{
+
+		$browserNav  = property_exists($item, 'browserNav') ? $this->setBrowsernav($item) : '';
+		$item->title = property_exists($item, 'menu_image') ? $this->setTitle($item) : $item->title;
 
 		switch ($item->type)
 		{
@@ -176,28 +341,73 @@ class modMenuwrenchHelper
 				break;
 
 			default:
-				$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->title . '</a>';
+				$item->link = strpos($item->link, 'Itemid') ? $item->link : $item->link . '&Itemid=' . $item->id;
+				$output     = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link) . '"/>' . $item->title . '</a>';
 				break;
 		}
 
-		$level++;
-
-		if (isset($item->children) && $level <= $renderDepth)
-		{
-
-			$output .= $containerOpenTag;
-
-			foreach ($item->children as $item)
-			{
-
-				$output .= $this->render($item, $containerTag, $containerClass, $itemTag, $level);
-			}
-			$output .= $itemCloseTag;
-			$output .= $containerCloseTag;
-		}
-
-		$output .= $itemCloseTag;
-
 		return $output;
 	}
+
+	/**
+	 * Conditionally sets the item's browsernav property
+	 *
+	 * @param $item
+	 *
+	 * @return string
+	 */
+	private function setBrowsernav($item)
+	{
+		switch ($item->browserNav) :
+			default:
+			case 0:
+				$browserNav = '';
+				break;
+			case 1:
+				$browserNav = 'target="_blank"';
+				break;
+			case 2:
+				$browserNav = "onclick=\"window.open(this.href,'targetWindow','toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,'" . $this->params->get('window_open') . ");return false;\"";
+				break;
+		endswitch;
+
+		return $browserNav;
+	}
+
+	/**
+	 * Sets null properties if they don't exist
+	 *
+	 * @param $items
+	 *
+	 * @return mixed
+	 */
+	private function setNullProperties($items)
+	{
+		foreach ($items as $item)
+		{
+			$item->type = property_exists($item, 'type') ? $this->type : '';
+		}
+
+		return $items;
+	}
+
+	/**
+	 * Render item title with image if it is set
+	 *
+	 * @param $item
+	 *
+	 * @return string
+	 */
+	private function setTitle($item)
+	{
+		if ($item->menu_image)
+		{
+			$item->params->get('menu_text', 1) ?
+				$item->title = '<img src="' . $item->menu_image . '" alt="' . $item->title . '" /><span class="image-title">' . $item->title . '</span> ' :
+				$item->title = '<img src="' . $item->menu_image . '" alt="' . $item->title . '" />';
+		}
+
+		return $item->title;
+	}
+
 }
