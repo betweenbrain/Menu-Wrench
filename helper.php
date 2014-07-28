@@ -296,7 +296,7 @@ class modMenuwrenchHelper
 
 				$output .= $this->render($item, $containerTag, $containerClass, $itemTag, $level);
 			}
-			$output .= $itemCloseTag;
+
 			$output .= $containerCloseTag;
 		}
 
