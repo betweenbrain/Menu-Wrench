@@ -316,33 +316,33 @@ class modMenuwrenchHelper
 	private function startOutput($item, $itemOpenTag)
 	{
 
-		$browserNav  = property_exists($item, 'browserNav') ? $this->setBrowsernav($item) : '';
-		$item->inner = property_exists($item, 'menu_image') ? $this->setImage($item) : $item->title;
+		$browserNav = property_exists($item, 'browserNav') ? $this->setBrowsernav($item) : '';
+		$title      = property_exists($item, 'menu_image') ? $this->setImage($item) : $item->title;
 
 		switch ($item->type)
 		{
 			case 'alias':
-				$output = $itemOpenTag . '<a ' . $browserNav . ' href="index.php?Itemid=' . $item->params->get('aliasoptions') . '"/>' . $item->inner . '</a>';
+				$output = $itemOpenTag . '<a ' . $browserNav . ' href="index.php?Itemid=' . $item->params->get('aliasoptions') . '"/>' . $title . '</a>';
 				break;
 
 			case 'separator':
-				$output = $itemOpenTag . '<span class="separator">' . $item->inner . '</span>';
+				$output = $itemOpenTag . '<span class="separator">' . $title . '</span>';
 				break;
 
 			case 'url' :
 				if ((strpos($item->link, 'index.php?') === 0) && (strpos($item->link, 'Itemid=') === false))
 				{
-					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->inner . '</a>';
+					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $title . '</a>';
 				}
 				else
 				{
-					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . $item->link . '"/>' . $item->inner . '</a>';
+					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . $item->link . '"/>' . $title . '</a>';
 				}
 				break;
 
 			default:
 				$item->link = strpos($item->link, 'Itemid') ? $item->link : $item->link . '&Itemid=' . $item->id;
-				$output     = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link) . '"/>' . $item->inner . '</a>';
+				$output     = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link) . '"/>' . $title . '</a>';
 				break;
 		}
 
