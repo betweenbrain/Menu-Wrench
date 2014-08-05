@@ -341,8 +341,8 @@ class modMenuwrenchHelper
 				break;
 
 			default:
-				$item->link = strpos($item->link, 'Itemid') ? $item->link : $item->link . '&Itemid=' . $item->id;
-				$output     = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link) . '"/>' . $title . '</a>';
+				$link   = strpos($item->link, 'Itemid') ? $item->link : $item->link . '&Itemid=' . $item->id;
+				$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($link) . '"/>' . $title . '</a>';
 				break;
 		}
 
