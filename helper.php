@@ -317,32 +317,32 @@ class modMenuwrenchHelper
 	{
 
 		$browserNav  = property_exists($item, 'browserNav') ? $this->setBrowsernav($item) : '';
-		$item->inner = property_exists($item, 'menu_image') ? $this->setImage($item) : $item->title;
+		$item->title = property_exists($item, 'menu_image') ? $this->setTitle($item) : $item->title;
 
 		switch ($item->type)
 		{
 			case 'alias':
-				$output = $itemOpenTag . '<a ' . $browserNav . ' href="index.php?Itemid=' . $item->params->get('aliasoptions') . '"/>' . $item->inner . '</a>';
+				$output = $itemOpenTag . '<a ' . $browserNav . ' href="index.php?Itemid=' . $item->params->get('aliasoptions') . '"/>' . $item->title . '</a>';
 				break;
 
 			case 'separator':
-				$output = $itemOpenTag . '<span class="separator">' . $item->inner . '</span>';
+				$output = $itemOpenTag . '<span class="separator">' . $item->title . '</span>';
 				break;
 
 			case 'url' :
 				if ((strpos($item->link, 'index.php?') === 0) && (strpos($item->link, 'Itemid=') === false))
 				{
-					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->inner . '</a>';
+					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->title . '</a>';
 				}
 				else
 				{
-					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . $item->link . '"/>' . $item->inner . '</a>';
+					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . $item->link . '"/>' . $item->title . '</a>';
 				}
 				break;
 
 			default:
 				$item->link = strpos($item->link, 'Itemid') ? $item->link : $item->link . '&Itemid=' . $item->id;
-				$output     = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link) . '"/>' . $item->inner . '</a>';
+				$output     = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link) . '"/>' . $item->title . '</a>';
 				break;
 		}
 
@@ -398,14 +398,16 @@ class modMenuwrenchHelper
 	 *
 	 * @return string
 	 */
-	private function setImage($item)
+	private function setTitle($item)
 	{
 		if ($item->menu_image)
 		{
-			return $item->params->get('menu_text', 1) ?
-				'<img src="' . $item->menu_image . '" alt="' . $item->title . '" /><span class="image-title">' . $item->title . '</span> ' :
-				'<img src="' . $item->menu_image . '" alt="' . $item->title . '" />';
+			$item->params->get('menu_text', 1) ?
+				$item->title = '<img src="' . $item->menu_image . '" alt="' . $item->title . '" /><span class="image-title">' . $item->title . '</span> ' :
+				$item->title = '<img src="' . $item->menu_image . '" alt="' . $item->title . '" />';
 		}
+
+		return $item->title;
 	}
 
 }
