@@ -317,7 +317,7 @@ class modMenuwrenchHelper
 	{
 
 		$browserNav = property_exists($item, 'browserNav') ? $this->setBrowsernav($item) : '';
-		$title      = property_exists($item, 'menu_image') ? $this->setImage($item) : $item->title;
+		$title      = property_exists($item, 'menu_image') && $item->menu_image != '' ? $this->setImage($item) : $item->title;
 
 		switch ($item->type)
 		{
