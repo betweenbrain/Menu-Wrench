@@ -322,7 +322,7 @@ class modMenuwrenchHelper
 		switch ($item->type)
 		{
 			case 'alias':
-				$output = $itemOpenTag . '<a ' . $browserNav . ' href="index.php?Itemid=' . $item->params->get('aliasoptions') . '"/>' . $title . '</a>';
+				$output = $itemOpenTag . '<a ' . $browserNav . ' href="index.php?Itemid=' . $item->params->get('aliasoptions') . '">' . $title . '</a>';
 				break;
 
 			case 'separator':
@@ -332,17 +332,17 @@ class modMenuwrenchHelper
 			case 'url' :
 				if ((strpos($item->link, 'index.php?') === 0) && (strpos($item->link, 'Itemid=') === false))
 				{
-					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $title . '</a>';
+					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '">' . $title . '</a>';
 				}
 				else
 				{
-					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . $item->link . '"/>' . $title . '</a>';
+					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . $item->link . '">' . $title . '</a>';
 				}
 				break;
 
 			default:
 				$link   = strpos($item->link, 'Itemid') ? $item->link : $item->link . '&Itemid=' . $item->id;
-				$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($link) . '"/>' . $title . '</a>';
+				$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($link) . '">' . $title . '</a>';
 				break;
 		}
 
