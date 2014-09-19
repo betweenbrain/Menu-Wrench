@@ -9,7 +9,7 @@
  * License    GNU GPL v2 or later
  */
 ?>
-<ul class="menu">
+<ul class="menu<?php echo htmlspecialchars($params->get('moduleclass_sfx'))?>">
 	<?php foreach ($items as $item) {
 		echo $helper->render($item, '<ul>', 'menu', '<li>');
 	}

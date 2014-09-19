@@ -316,33 +316,33 @@ class modMenuwrenchHelper
 	private function startOutput($item, $itemOpenTag)
 	{
 
-		$browserNav  = property_exists($item, 'browserNav') ? $this->setBrowsernav($item) : '';
-		$item->title = property_exists($item, 'menu_image') ? $this->setTitle($item) : $item->title;
+		$browserNav = property_exists($item, 'browserNav') ? $this->setBrowsernav($item) : '';
+		$title      = property_exists($item, 'menu_image') && $item->menu_image != '' ? $this->setImage($item) : $item->title;
 
 		switch ($item->type)
 		{
 			case 'alias':
-				$output = $itemOpenTag . '<a ' . $browserNav . ' href="index.php?Itemid=' . $item->params->get('aliasoptions') . '"/>' . $item->title . '</a>';
+				$output = $itemOpenTag . '<a ' . $browserNav . ' href="index.php?Itemid=' . $item->params->get('aliasoptions') . '">' . $title . '</a>';
 				break;
 
 			case 'separator':
-				$output = $itemOpenTag . '<span class="separator">' . $item->title . '</span>';
+				$output = $itemOpenTag . '<span class="separator">' . $title . '</span>';
 				break;
 
 			case 'url' :
 				if ((strpos($item->link, 'index.php?') === 0) && (strpos($item->link, 'Itemid=') === false))
 				{
-					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '"/>' . $item->title . '</a>';
+					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link . '&Itemid=' . $item->id) . '">' . $title . '</a>';
 				}
 				else
 				{
-					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . $item->link . '"/>' . $item->title . '</a>';
+					$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . $item->link . '">' . $title . '</a>';
 				}
 				break;
 
 			default:
-				$item->link = strpos($item->link, 'Itemid') ? $item->link : $item->link . '&Itemid=' . $item->id;
-				$output     = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($item->link) . '"/>' . $item->title . '</a>';
+				$link   = strpos($item->link, 'Itemid') ? $item->link : $item->link . '&Itemid=' . $item->id;
+				$output = $itemOpenTag . '<a ' . $browserNav . ' href="' . JRoute::_($link) . '">' . $title . '</a>';
 				break;
 		}
 
@@ -398,16 +398,14 @@ class modMenuwrenchHelper
 	 *
 	 * @return string
 	 */
-	private function setTitle($item)
+	private function setImage($item)
 	{
 		if ($item->menu_image)
 		{
-			$item->params->get('menu_text', 1) ?
-				$item->title = '<img src="' . $item->menu_image . '" alt="' . $item->title . '" /><span class="image-title">' . $item->title . '</span> ' :
-				$item->title = '<img src="' . $item->menu_image . '" alt="' . $item->title . '" />';
+			return $item->params->get('menu_text', 1) ?
+				'<img src="' . $item->menu_image . '" alt="' . $item->title . '" /><span class="image-title">' . $item->title . '</span> ' :
+				'<img src="' . $item->menu_image . '" alt="' . $item->title . '" />';
 		}
-
-		return $item->title;
 	}
 
 }
