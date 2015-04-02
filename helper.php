@@ -144,7 +144,8 @@ class modMenuwrenchHelper
 		/**
 		 * Builds object classes
 		 */
-		$classes = 'item' . $item->id . ' ' . $item->alias;
+		$item->anchor_css = htmlspecialchars($item->params->get('menu-anchor_css', ''), ENT_COMPAT, 'UTF-8', false);
+		$classes = 'item' . $item->id . ' ' . $item->alias . ' ' . $item->anchor_css;
 
 		// Add parent class to all parents
 		if (isset($item->children))
